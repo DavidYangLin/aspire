@@ -1,0 +1,81 @@
+<div style="width: 240px;height: 100%;position: fixed;background-color: #001529">
+  <!-- <button nz-button [nzType]="'primary'" (click)="toggleCollapsed()" style="margin-bottom: 10px;">
+    <i class="anticon" [class.anticon-menu-unfold]="isCollapsed" [class.anticon-menu-fold]="!isCollapsed">
+    </i>
+  </button> -->
+  <div style="height: 46px;line-height: 46px;">
+    <img src="../../../assets/image/logo.png">
+  </div>
+  <ul nz-menu [nzMode]="'inline'" nzTheme='dark' [nzInlineCollapsed]="isCollapsed">
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Navigation One' : ''">
+      <span title> 
+        <i class="anticon anticon-mail"></i>
+        <span routerLink="./userCenter">个人中心</span> 
+      </span> 
+    </li>
+    <li *ngIf="!role.isUser" nz-submenu>
+      <span title>
+        <i class="anticon anticon-appstore"></i>
+        <span>用户管理</span>
+      </span>
+      <ul>
+        <li *ngIf="role.isAdmin" nz-menu-item routerLink="./agentManage">代理商管理</li>
+        <!-- <li nz-menu-item routerLink="./customerManage">客户管理</li> -->
+        <li *ngIf="role.isAgent" nz-menu-item [routerLink]="['./customerManage',userId]">客户管理</li>
+        
+      </ul>
+    </li>
+    <!-- *ngIf="!role.isAdmin" -->
+    <li *ngIf="!role.isAdmin" nz-menu-item>
+        <span title> 
+          <i class="anticon anticon-mail"></i>
+          <span routerLink="./messageSent">信息发送</span> 
+        </span>
+    </li>
+    <li *ngIf="role.isAdmin" nz-submenu>
+      <span title>
+        <i class="anticon anticon-setting"></i>
+        <span>数据标签</span>
+      </span>
+      <ul>
+        <li nz-menu-item routerLink="./locationSet">归属地设置</li>
+        <li nz-menu-item routerLink="./appSet">APP设置</li>
+        <li nz-menu-item routerLink="./keyWordSet">关键字设置</li>
+        <li nz-menu-item routerLink="./timeSet">期限设置</li>
+      </ul>
+    </li>
+    <li *ngIf="role.isAdmin" nz-menu-item>
+        <span title> 
+          <i class="anticon anticon-mail"></i>
+          <span routerLink="./logQuery">发送日志</span> 
+        </span> 
+    </li>
+    <!-- *ngIf="!role.isAdmin" -->
+    <li *ngIf="!role.isAdmin" nz-menu-item>
+      <span title> 
+        <i class="anticon anticon-mail"></i>
+        <span routerLink="./selfQuery">发送历史</span> 
+      </span> 
+    </li>
+  </ul>
+</div> 
+<div class="content">
+  <div class="head">
+      <ul nz-menu [nzMode]="'horizontal'" nzTheme='dark' style="width:80px;float: right;">
+          <li nz-submenu>
+            <span title>
+                <nz-avatar [nzText]="text" nzSize="large" style="vertical-align: middle;background-color: #ee8100;"></nz-avatar>
+            </span>
+            <ul style="width:80px;">
+                <li nz-menu-item (click)="loginOut()">注 销</li>
+            </ul>
+          </li>
+      </ul>
+      <!-- <nz-avatar [nzText]="text" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>       -->
+  </div>
+  <nz-content class="main" style="padding:20px 20px 20px 20px;" >
+      <div  style="background:#fff;min-height: 350px; padding: 20px;">
+         <router-outlet ></router-outlet>
+      </div>
+    </nz-content>
+</div>

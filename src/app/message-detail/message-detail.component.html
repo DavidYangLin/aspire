@@ -1,0 +1,51 @@
+<div nz-row>
+<!-- <div class="bg">
+  <div class="content"> -->
+    <div class="titleDiv" nz-col nzSpan="24">
+      <span class="spanTitle">发送详情</span>
+    </div>
+    <div style="margin-top: 10px;" nz-col nzSpan="24">
+      <!-- <form nz-form> -->
+          <nz-form-item *ngIf="type=='1'||type=='2'">
+              <nz-form-label [nzSm]="6" [nzXs]="24">标题</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input [(ngModel)]="title" name="title" nz-input id="email">              
+              </nz-form-control>
+            </nz-form-item>
+          <nz-form-item *ngIf="type!='1'&&type!='2'">
+              <nz-form-label [nzSm]="6" [nzXs]="24">内容</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <textarea maxlength="70" [(ngModel)]="content" name="content" [nzAutosize]="{ minRows: 6, maxRows: 6 }" nz-input></textarea>                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngIf="type=='2'">
+                <nz-form-label [nzSm]="6" [nzXs]="24">视频</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <video style="display: inline-block;" id="my-video" class="video-js" controls preload="auto" width="350px" height="400"
+                    poster="m.jpg" data-setup="{}">
+                      <source src="{{filePath}}" type="video/mp4">
+                      <source src="{{filePath}}" type="video/avi">
+                      <source src="{{filePath}}" type="video/x-ms-wmv">
+                    </video>
+                </nz-form-control> 
+              </nz-form-item>
+              <nz-form-item *ngIf="type=='1'">
+                <nz-form-label [nzSm]="6" [nzXs]="24">图文</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                  <div [innerHtml]="content"></div>
+                </nz-form-control>
+              </nz-form-item>
+      <!-- </form>  -->
+  <!-- </div>
+</div> -->
+</div>
+</div>
+<script src="../../assets/js/video.min.js"></script> 
+<script src="http://vjs.zencdn.net/5.19/lang/zh-CN.js"></script>
+<script type="text/javascript">
+  var myPlayer = videojs('my-video');
+  videojs("my-video").ready(function(){
+    var myPlayer = this;
+    myPlayer.play();
+  });
+</script> 

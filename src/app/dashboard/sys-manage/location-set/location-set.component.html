@@ -1,0 +1,50 @@
+<div nz-row>
+  <div class="titleDiv" nz-col nzSpan="24">
+    <span class="spanTitle">归属地设置</span>
+  </div>
+  <div nz-col nzSpan="24" style="margin-top:10px;">
+    <div nz-row>
+        <div nz-col nzSpan="12">
+          <!-- <nz-cascader
+          [nzOptions]="nzOptions"
+          [(ngModel)]="values"
+          nzPlaceHolder="请选择省市"          
+          (ngModelChange)="onChanges($event)">
+        </nz-cascader> -->
+        <nz-cascader nzPlaceHolder="请选择省市" [(ngModel)]="values" (ngModelChange)="onChanges($event)" [nzLoadData]="loadData"></nz-cascader>
+        </div>
+        <div nz-col nzSpan="12" style="text-align:right">
+            <!-- <button nz-button [nzType]="'primary'" ><span>查询</span></button> -->
+        </div>
+    </div>
+  </div>
+  <div style="margin-top: 10px;" nz-col nzSpan="24">
+    <form nz-form [formGroup]="validateForm" class="ant-advanced-search-form">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="8" *ngFor="let control of controlArray" [style.display]="control.show?'block':'none'">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzFor]="control.index">{{control.title}}</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="placeholder" [formControlName]="control.index" [attr.id]="control.index">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col [nzSpan]="24" style="text-align: right;">
+          <button *ngIf="isChoose" nz-button (click)="save()" [nzType]="'primary'">保存</button>
+        </div>
+      </div> 
+      <!-- <div nz-row>
+        <div nz-col [nzSpan]="24" style="text-align: right;">
+          <button nz-button [nzType]="'primary'">Search</button>
+          <button nz-button (click)="resetForm()">Clear</button>
+          <a style="margin-left:8px;font-size:12px;" (click)="toggleCollapse()">
+            Collapse
+            <i class="anticon" [class.anticon-down]="isCollapse" [class.anticon-up]="!isCollapse"></i>
+          </a>
+        </div>
+      </div> -->
+    </form>
+  </div>
+</div>

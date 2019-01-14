@@ -1,0 +1,43 @@
+<div nz-row>
+  <!-- <nz-spin [nzSpinning]="isSpinning" [nzDelay]="500"> -->
+  <div class="titleDiv" nz-col nzSpan="24" style="margin-bottom:10px;">
+    <span class="spanTitle">期限设置</span>
+  </div>
+  <!-- <div nz-col nzSpan="4"></div>  -->
+  <div nz-col nzSpan="24">
+    <div>
+      <form nz-form [formGroup]="userForm">
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">一天</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input style="width: 200px;" formControlName="day" nz-input name="day" placeholder="">
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">近三天</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input style="width: 200px;" formControlName="threeDay" nz-input name="threeDay" placeholder="">                
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">一周</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input style="width: 200px;" formControlName="week" nz-input name="week" placeholder="">                
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">近两周</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input style="width: 200px;" formControlName="twoWeek" nz-input name="twoWeek" placeholder="">                
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email"></nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"> 
+              <button (click)="save()" nz-button class="login-form-button" [nzType]="'primary'">保存</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+        </div>
+      <!-- </nz-spin> -->
+</div>

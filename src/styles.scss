@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+
+.spanTitle{
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+    //width: 100px;
+    background-color: #001529;
+    display: inline-block;
+    //margin-left: -20px;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.ant-form-item{
+    margin: 0 0 2px;
+}
+.titleDiv{
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+.displayNone{
+    display: none !important;
+}
+.displayBlock{
+    display: block !important;
+}
+.note-editor .note-editable {
+    line-height: 1;
+}
+.ant-divider, .ant-divider-vertical{
+    margin: 0 auto;
+}

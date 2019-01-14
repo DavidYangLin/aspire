@@ -1,0 +1,89 @@
+<div nz-row>
+    <!-- <nz-spin [nzSpinning]="isSpinning" [nzDelay]="500"> -->
+    <div class="titleDiv" nz-col nzSpan="24" style="margin-bottom:10px;">
+      <span class="spanTitle">个人中心</span>
+    </div>
+    <!-- <div nz-col nzSpan="4"></div>  -->
+    <div nz-col nzSpan="24">
+      <div>
+        <form nz-form>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">账号{{userInfo.userName}}</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.userName}}" id="name" name="name" placeholder="">
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">客户名称</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.name}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">联系电话</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.contactPhone}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">文字短信</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.textSmsCount}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">图文短信</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.imgSmsCount}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">视频短信</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.videoSmsCount}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">闪信</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.sxSmsCount}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email">霸信</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input style="width: 200px;" nz-input value="{{userInfo.baSmsCount}}" id="name" name="name" placeholder="">                
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24"></nz-form-label>
+                <nz-form-control [nzSm]="20" [nzXs]="24">
+                  <button nz-button (click)="resetPassword()" [nzType]="'primary'"><span>修改密码</span></button>
+                </nz-form-control>
+              </nz-form-item>
+          </form>
+          </div>
+        <!-- </nz-spin> -->
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="短信数量" (nzOnCancel)="handleCancelNumber()" (nzOnOk)="save()">
+    <form nz-form [formGroup]="userForm" class="login-form" >
+        <nz-form-item>
+          <nz-form-label [nzXs]="4" [nzSm]="4">旧密码</nz-form-label>
+          <nz-form-control [nzXs]="20" [nzSm]="20">
+            <nz-input-group>
+              <input type="password" nz-input formControlName="oldPassword" placeholder="请输入旧密码">
+            </nz-input-group>
+            <nz-form-explain style="color:red" *ngIf="userForm.get('oldPassword').dirty && userForm.get('oldPassword').errors">请输入旧密码</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item> 
+        <nz-form-item>
+          <nz-form-label [nzXs]="4" [nzSm]="4">新密码</nz-form-label>
+          <nz-form-control [nzXs]="20" [nzSm]="20">
+            <nz-input-group>
+              <input type="password" formControlName="newPassword" nz-input type="text" placeholder="请输入密码">
+            </nz-input-group>
+            <nz-form-explain style="color:red" *ngIf="userForm.get('newPassword').dirty && userForm.get('newPassword').errors">请输入新密码</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item> 
+      </form>
+</nz-modal>
