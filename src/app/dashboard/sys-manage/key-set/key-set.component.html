@@ -1,0 +1,120 @@
+<div nz-row>
+    <div class="titleDiv" nz-col nzSpan="24">
+      <span class="spanTitle">关键字设置</span>
+    </div>
+    <!-- <div nz-col nzSpan="24" style="padding-top:10px;">
+        <span *ngIf="isCountOne" style="display:inline-block;background-color:#ee8100;color:white;">当前关键字设置比例相加总和不为1，请设置</span>
+      </div> -->
+    <div nz-col nzSpan="24">
+      <div nz-row>
+          <div nz-col nzSpan="12">
+            <span *ngIf="isCountOne" style="display:inline-block;background-color:#ee8100;color:white;">当前关键字设置比例相加总和不为1，请设置</span>
+          </div>
+          <div nz-col nzSpan="12" style="text-align:right">
+              <button nz-button [nzType]="'primary'" (click)="showModal()"><span>新建关键字</span></button>
+          </div>
+      </div>
+    </div>
+    <!-- [nzTotal]="page.totalCount"
+    [(nzPageIndex)]="page.pageIndex"
+    (nzPageIndexChange)="refreshData()"
+    [nzFrontPagination]="false"   -->
+    <div style="margin-top: 10px;" nz-col nzSpan="24">
+        <nz-table #nestedTable 
+        [nzData]="nestedTableData"
+        [nzLoading]="_loading"
+        [nzShowPagination]="false"
+        [nzPageSize]="9999">
+            <thead>
+              <tr>
+                <th nzShowExpand></th>
+                <th>关键字</th>
+                <th>比重</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-template ngFor let-data [ngForOf]="nestedTable.data">
+                <tr>
+                  <td nzShowExpand [(nzExpand)]="data.expand"></td>
+                  <td>{{data.name}}</td>
+                  <td>{{data.per}}</td>
+                  <td>
+                    <a (click)="showModal(data)">编辑</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <span class="btn">
+                        <a nz-popconfirm nzTitle="是否删除该关键字" (nzOnConfirm)="confirm(data.id)" (nzOnCancel)="cancel()">删除</a>
+                    </span>
+                  </td>
+                </tr>
+                <tr [nzExpand]="data.expand">
+                  <td></td>
+                  <td colspan="7">
+                    <nz-table #innerTable [nzData]="data.childList" nzSize="middle" [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <th>内容</th>
+                          <th>比重</th>
+                          <!-- <th>操作</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of innerTable.data">
+                          <td>{{data.childName}}</td>
+                          <td>{{data.per}}</td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </td>
+                </tr>
+              </ng-template>
+            </tbody>
+          </nz-table>
+    </div>
+  </div>
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="添加关键字" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item >
+            <nz-form-label [nzXs]="24" [nzSm]="4">关键字</nz-form-label>
+            <nz-form-control [nzXs]="24" [nzSm]="20">
+              <input nz-input formControlName="pControlInstance" id="keyWords1" style="width: 50%; margin-right:8px;" placeholder="关键字名称">
+              <input nz-input formControlName="pControlInstanceChild" id="keyWords2" style="width: 40%; margin-right:8px;" placeholder="比例">
+              <nz-form-explain style="color: red;" *ngIf="(validateForm.get('pControlInstance')?.dirty&&validateForm.get('pControlInstance')?.hasError('required'))||(validateForm.get('pControlInstanceChild')?.dirty&&validateForm.get('pControlInstanceChild')?.hasError('required'))">
+                请输入关键字，比例
+              </nz-form-explain>
+              <nz-form-explain style="color: red;" *ngIf="validateForm.get('pControlInstanceChild')?.dirty&&validateForm.get('pControlInstanceChild')?.hasError('percentError')">
+                请输入正确的比例如：0.1或1
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item> 
+        <nz-form-item *ngFor="let control of controlArray;let i = index">
+          <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i==0" [nzFor]="control.controlInstance">子关键字</nz-form-label>
+          <nz-form-control [nzXs]="24" [nzSm]="20" [nzOffset]="i==0?0:4">
+            <input nz-input style="width: 50%; margin-right:8px;" placeholder="子关键字名称" [attr.id]="control.id" [formControlName]="control.controlInstance">
+            <input nz-input style="width: 40%; margin-right:8px;" placeholder="比例" [attr.id]="control.idChild" [formControlName]="control.controlInstanceChild">
+            <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="removeField(control,$event)"></i>
+            <nz-form-explain style="color: red;" *ngIf="getFormControl(control.controlInstance)?.dirty||getFormControl(control.controlInstanceChild)?.dirty">
+                <ng-container *ngIf="getFormControl(control.controlInstance)?.hasError('required')">
+                    请输入子关键字
+                </ng-container>
+                <ng-container *ngIf="getFormControl(control.controlInstanceChild)?.hasError('required')">
+                    请输入比例
+                </ng-container>
+                <ng-container  *ngIf="getFormControl(control.controlInstanceChild)?.hasError('percentError')">
+                    请输入正确的比例如：0.1或1
+                </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:4}">
+            <button nz-button nzType="dashed" style="width:60%" (click)="addField($event)"><i class="anticon anticon-plus"></i> 添加子关键字</button>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item>
+          <nz-form-control [nzXs]="{span:24,offset:0}" [nzSm]="{span:20,offset:4}">
+            <button nz-button nzType="primary">Submit</button>
+          </nz-form-control>
+        </nz-form-item> -->
+      </form>
+</nz-modal>

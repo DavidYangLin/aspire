@@ -1,0 +1,47 @@
+<div class="bg">
+  <div style="height: 100%;background-color: rgb(255,255,255,0.4);">
+      <div style="height: 200px;text-align: center;padding-top: 25px;">
+          <h2 style="font-size: 56px;margin: 0;padding: 0;color: white;font-weight: bold;"><span style="display:inline-block;background-color:#ee8100;">中国移动</span></h2>
+          <h3 style="font-size: 30px;margin: 10px 0 0 0;padding: 0;color: white;"><span style="display:inline-block;background-color:#ee8100">企业大数据运营中心</span></h3>
+      </div>
+  <div class="logoBg">
+    <img src="../../assets/image/logo2.png">
+    <!-- (ngSubmit)="submitForm()" -->
+    <form nz-form [formGroup]="validateForm" class="login-form" >
+        <nz-form-item>
+          <nz-form-control>
+            <nz-input-group nzPrefixIcon="anticon anticon-user">
+              <input type="text" nz-input formControlName="userName" placeholder="账号">
+            </nz-input-group>
+            <nz-form-explain *ngIf="validateForm.get('userName').dirty && validateForm.get('userName').errors">请输入账号</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item> 
+        <nz-form-item> 
+          <nz-form-control>
+            <nz-input-group nzPrefixIcon="anticon anticon-lock">
+              <input type="password" nz-input formControlName="password" placeholder="密码">
+            </nz-input-group>
+            <nz-form-explain *ngIf="validateForm.get('password').dirty && validateForm.get('password').errors">请输入密码</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item> 
+            <nz-form-control>
+              <nz-input-group style="width: 40%;vertical-align: middle;" nzPrefixIcon="anticon anticon-lock">
+                <input type="text" nz-input formControlName="vcode" placeholder="验证码">
+              </nz-input-group>
+              <nz-input-group style="width: 60%;text-align: left;padding-left: 10px;cursor: pointer;" nzPrefixIcon="anticon anticon-lock">
+                  <!-- <input type="password" nz-input formControlName="password" placeholder="验证码"> -->
+                  <img #img>
+                </nz-input-group>
+              <nz-form-explain *ngIf="validateForm.get('vcode').dirty && validateForm.get('vcode').errors">请输入验证码</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        <nz-form-item>
+          <nz-form-control> 
+            <button style="width: 100%;" (click)="login()" [nzLoading]="loading" nz-button class="login-form-button" [nzType]="'primary'">登录</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </div>
+</div>

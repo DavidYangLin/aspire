@@ -1,0 +1,160 @@
+<div nz-row>
+    <div class="titleDiv" nz-col nzSpan="24">
+      <span class="spanTitle">客户管理</span>
+    </div>
+    <div nz-col nzSpan="24" style="text-align:right;">
+        <button *ngIf="!isAdmin" nz-button [nzType]="'primary'" (click)="showModal(false)"><span>添加用户</span></button>&nbsp;
+        <a *ngIf="isAdmin" [routerLink]="['../../agentManage']"><span>返回</span></a>
+    </div>
+    <div style="margin-top: 10px;" nz-col nzSpan="24">
+        <nz-table #nzTable 
+        [nzData]="userData"
+        [nzTotal]="page.totalCount"
+        [nzLoading]="_loading"
+        [(nzPageIndex)]="page.pageIndex"
+        (nzPageIndexChange)="refreshData()"
+        [nzFrontPagination]="false"
+        [nzPageSize]="5" >
+  <thead nz-thead>
+    <tr>
+      <th nz-th><span>客户账号</span></th>
+      <th nz-th *ngIf="isAdmin"><span>密码</span></th>
+      <th nz-th><span>客户名称</span></th>
+      <th nz-th><span>联系人</span></th>
+      <th nz-th><span>剩余短信总数</span></th>
+      <th nz-th><span>手机</span></th>
+      <th nz-th><span>最少发送量</span></th>
+      <th nz-th><span>操作</span></th>
+    </tr>
+  </thead>
+  <tbody nz-tbody>
+    <ng-template ngFor let-data [ngForOf]="nzTable.data">
+      <tr nz-tbody-tr>
+        <td nz-td>{{data.userName}}</td>
+        <td nz-td *ngIf="isAdmin">{{data.password}}</td>
+        <td nz-td>{{data.name}}</td>
+        <td nz-td>{{data.contactPerson}}</td>
+        <td nz-td>{{data.count}}<i (click)="showModalNumber(data)" class="anticon anticon-question-circle-o"></i></td>
+        <td nz-td>{{data.contactPhone}}</td>
+        <td nz-td>{{data.minNumber}}</td>
+        <td nz-td>
+            <span *ngIf="!isAdmin" class="btn">
+                <a (click)="showModal(true,data)">编辑</a>
+            </span> 
+            <nz-divider *ngIf="!isAdmin" nzType="vertical"></nz-divider>
+            <span *ngIf="data.userState==0" class="btn">
+                <a nz-popconfirm nzTitle="是否停用该账号" (nzOnConfirm)="setUser(data.id,1)" (nzOnCancel)="cancel()">停用</a>
+            </span>
+            <nz-divider *ngIf="data.userState==0" nzType="vertical"></nz-divider>
+            <span *ngIf="data.userState==1" class="btn">
+                <a nz-popconfirm nzTitle="是否启用该账号" (nzOnConfirm)="setUser(data.id,0)" (nzOnCancel)="cancel()">启用</a>
+            </span>
+            <nz-divider *ngIf="data.userState==1" nzType="vertical"></nz-divider>
+            <span class="btn">
+              <a nz-popconfirm nzTitle="是否重置用户密码为123456?" (nzOnConfirm)="resetPassword(data.id)" (nzOnCancel)="cancel()">重置密码</a>
+            </span>
+            <nz-divider nzType="vertical"></nz-divider>
+            <span class="btn">
+              <a nz-popconfirm nzTitle="是否删除该用户" (nzOnConfirm)="deleteUser(data.id)" (nzOnCancel)="cancel()">删除</a>
+            </span>
+            <nz-divider *ngIf="!isAdmin" nzType="vertical"></nz-divider> 
+            <span *ngIf="!isAdmin" class="btn">
+                <a (click)="showModalMess(data.id)">充值</a>
+            </span>
+            <!-- <nz-divider nzType="vertical"></nz-divider>
+            <span class="btn">
+                <a [routerLink]="['..',{outlets: {right:['appointrReviewer',data.userId,data.userName,data.organizationName]}}]">删除</a>
+            </span> -->
+        </td>
+      </tr>
+    </ng-template>
+  </tbody> 
+</nz-table>
+    </div>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="添加客户" (nzOnCancel)="handleCancel()" (nzOnOk)="saveUser()">
+        <form nz-form [formGroup]="userForm" class="login-form" >
+                <nz-form-item>
+                  <nz-form-label [nzXs]="4" [nzSm]="4">客户账号</nz-form-label>
+                  <nz-form-control [nzXs]="20" [nzSm]="20">
+                    <nz-input-group>
+                      <input type="text" nz-input formControlName="userName" placeholder="客户账号">
+                    </nz-input-group>
+                    <nz-form-explain style="color:red" *ngIf="userForm.get('userName').dirty && userForm.get('userName').errors">请输入客户账号</nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item> 
+                <nz-form-item>
+                  <nz-form-label [nzXs]="4" [nzSm]="4">密码</nz-form-label>
+                  <nz-form-control [nzXs]="20" [nzSm]="20">
+                    <nz-input-group *ngIf="!isAdd">
+                      <input type="text" formControlName="password" nz-input type="text" placeholder="密码">
+                    </nz-input-group>
+                    <nz-input-group *ngIf="isAdd">
+                      <input type="text" disabled="true" nz-input type="password" value="123456" placeholder="密码">
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item> 
+                <nz-form-item>
+                  <nz-form-label [nzXs]="4" [nzSm]="4">客户名称</nz-form-label>
+                  <nz-form-control [nzXs]="20" [nzSm]="20">
+                    <nz-input-group>
+                      <input type="text" nz-input formControlName="name" placeholder="客户名称">
+                    </nz-input-group>
+                    <nz-form-explain style="color:red" *ngIf="userForm.get('name').dirty && userForm.get('name').errors">请输入客户名称</nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-label [nzXs]="4" [nzSm]="4">联系人</nz-form-label>
+                  <nz-form-control [nzXs]="20" [nzSm]="20">
+                    <nz-input-group>
+                      <input type="text" nz-input formControlName="contactPerson" placeholder="联系人">
+                    </nz-input-group>
+                    <nz-form-explain style="color:red" *ngIf="userForm.get('contactPerson').dirty && userForm.get('contactPerson').errors">请输入联系人</nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-label [nzXs]="4" [nzSm]="4">手机</nz-form-label>
+                  <nz-form-control [nzXs]="20" [nzSm]="20">
+                    <nz-input-group>
+                      <input type="text" nz-input formControlName="contactPhone" placeholder="手机">
+                    </nz-input-group>
+                    <nz-form-explain style="color:red" *ngIf="userForm.get('contactPhone').dirty && userForm.get('contactPhone').errors">请输入手机</nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-label [nzXs]="4" [nzSm]="4">最少发送量</nz-form-label>
+                  <nz-form-control [nzXs]="20" [nzSm]="20">
+                    <nz-input-group>
+                      <input type="text" nz-input formControlName="minNumber" placeholder="最少发送数量">
+                    </nz-input-group>
+                    <nz-form-explain style="color:red" *ngIf="userForm.get('minNumber').dirty && userForm.get('minNumber').errors">请输入最少发送数量</nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item *ngIf="appPermission||keyPermission">
+                    <nz-form-label [nzXs]="4" [nzSm]="4">权限</nz-form-label>
+                    <nz-form-control [nzXs]="20" [nzSm]="20">
+                      <nz-checkbox-group name="test1" formControlName="checkOption"></nz-checkbox-group>
+                      <nz-form-explain style="color:red" *ngIf="userForm.get('contactPhone').dirty && userForm.get('contactPhone').errors">请输入手机</nz-form-explain>
+                    </nz-form-control>
+                  </nz-form-item>
+              </form>
+  </nz-modal>
+<nz-modal [(nzVisible)]="isVisibleMess" nzTitle="短信充值" (nzOnCancel)="handleCancelMess()" (nzOnOk)="reCharge()">
+    <p>充值类型：
+        <nz-select style="width: 200px;" [(ngModel)]="charge.smsType" name="type" nzAllowClear nzPlaceHolder="请选择投放方式">
+                <nz-option nzValue="0" nzLabel="文字手机报"></nz-option>
+                <nz-option nzValue="1" nzLabel="图文手机报"></nz-option>
+                <nz-option nzValue="2" nzLabel="视频手机报"></nz-option>
+                <nz-option nzValue="3" nzLabel="霸信"></nz-option>
+                <nz-option nzValue="4" nzLabel="闪信"></nz-option>
+        </nz-select> 
+    </p>
+    <p>充值数量： <input nz-input [(ngModel)]="charge.rechargeCount" style="width: 200px;" placeholder="请输入充值数量"></p>
+  </nz-modal>
+  <nz-modal [(nzVisible)]="isVisibleNumber" nzTitle="短信数量" (nzOnCancel)="handleCancelNumber()" (nzOnOk)="handleOkNumber()">
+        <p>文字手机报： {{userObj.textSmsCount}}</p>
+        <p>图文手机报： {{userObj.imgSmsCount}}</p>
+        <p>视频手机报： {{userObj.videoSmsCount}}</p>
+        <p>霸信： {{userObj.baSmsCount}}</p>
+        <p>闪信： {{userObj.sxSmsCount}}</p>
+  </nz-modal>

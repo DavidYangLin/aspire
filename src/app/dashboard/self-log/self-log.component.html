@@ -1,0 +1,62 @@
+<div nz-row>
+  <div class="titleDiv" nz-col nzSpan="24">
+    <span class="spanTitle">发送历史</span>
+  </div>
+  <div nz-col nzSpan="24" style="margin-top:10px;">
+    <!-- <div nz-row>
+        <div nz-col nzSpan="12">
+          状态：
+            <nz-select style="width: 120px;" [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="Choose">
+                <nz-option nzValue="1" nzLabel="已提交"></nz-option>
+                <nz-option nzValue="2" nzLabel="已发送"></nz-option>
+                <nz-option nzValue="2" nzLabel="全部"></nz-option>
+              </nz-select>
+        </div>
+        <div nz-col nzSpan="12" style="text-align:right">
+            <button nz-button [nzType]="'primary'"><span>查询</span></button>
+        </div>
+    </div> -->
+  </div>
+  <div style="margin-top: 10px;" nz-col nzSpan="24">
+      <nz-table #nzTable 
+      [nzData]="userData"
+      [nzTotal]="page.totalCount"
+      [nzLoading]="_loading"
+      [(nzPageIndex)]="page.pageIndex"
+      (nzPageIndexChange)="refreshData()"
+      [nzFrontPagination]="false"
+      [nzPageSize]="5" >
+<thead nz-thead>
+  <tr>
+    <!-- <th nz-th><span>客户账号</span></th>
+    <th nz-th><span>联系人</span></th> -->
+    <th nz-th><span>状态</span></th>
+    <th nz-th><span>发送类型</span></th>
+    <th nz-th><span>发送条数</span></th>
+    <th nz-th><span>发送时间</span></th>
+    <th nz-th style="width:300px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><span>发送内容</span></th>
+    <th nz-th><span>操作</span></th>
+  </tr>
+</thead>
+<tbody nz-tbody>
+  <ng-template ngFor let-data [ngForOf]="nzTable.data">
+    <tr nz-tbody-tr>
+      <!-- <td nz-td>{{data.userName}}</td>
+      <td nz-td>{{data.name}}</td> -->
+      <td nz-td>已发送</td>
+      <td nz-td>{{data.smsTypeText}}</td>
+      <td nz-td>{{data.sendCount}}</td>
+      <td nz-td>{{data.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td *ngIf="data.smsType!='1'&&data.smsType!='2'" nz-td>{{data.contents}}</td>
+      <td *ngIf="data.smsType=='1'||data.smsType=='2'" nz-td>{{data.title}}</td>
+      <td nz-td>
+          <span class="btn">
+              <a [routerLink]="['../messageDetail',data.id,data.smsType]">查看</a>
+          </span>
+      </td>
+    </tr>
+  </ng-template>
+</tbody> 
+</nz-table> 
+  </div>
+</div>

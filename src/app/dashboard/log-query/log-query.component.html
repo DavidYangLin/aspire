@@ -1,0 +1,84 @@
+<div nz-row>
+  <div class="titleDiv" nz-col nzSpan="24">
+    <span class="spanTitle">发送日志</span>
+  </div>
+  <div nz-col nzSpan="24">
+    <div nz-row>
+        <div nz-col nzSpan="12">
+          状态：
+            <nz-select style="width: 120px;" [(ngModel)]="page.sendState" nzAllowClear nzPlaceHolder="状态">
+                <nz-option nzValue="0" nzLabel="已提交"></nz-option>
+                <nz-option nzValue="2" nzLabel="已发送"></nz-option>
+                <nz-option nzValue="3" nzLabel="全部"></nz-option>
+                <!-- <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option> -->
+              </nz-select>
+        </div>
+        <div nz-col nzSpan="12" style="text-align:right">
+            <button nz-button (click)="query()" [nzType]="'primary'"><span>查询</span></button>
+        </div>
+    </div>
+  </div>
+  <div style="margin-top: 10px;" nz-col nzSpan="24">
+      <nz-table #nzTable 
+      [nzData]="userData"
+      [nzTotal]="page.totalCount"
+      [nzLoading]="_loading"
+      [(nzPageIndex)]="page.pageIndex"
+      (nzPageIndexChange)="refreshData()"
+      [nzFrontPagination]="false"
+      [nzPageSize]="page.pageSize" >
+<thead nz-thead>
+  <tr>
+    <th nz-th><span>客户账号</span></th>
+    <th nz-th><span>联系人</span></th>
+    <th nz-th><span>状态</span></th>
+    <th nz-th><span>发送类型</span></th>
+    <th nz-th><span>发送条数</span></th>
+    <th nz-th><span>发送时间</span></th>
+    <th nz-th style="width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><span>发送内容</span></th>
+    <th nz-th><span>操作</span></th>
+  </tr>
+</thead>
+<tbody nz-tbody>
+  <ng-template ngFor let-data [ngForOf]="nzTable.data">
+    <tr nz-tbody-tr>
+      <td nz-td>{{data.userName}}</td>
+      <td nz-td>{{data.name}}</td>
+      <td nz-td>{{data.sendStateText}}</td>
+      <td nz-td>{{data.smsTypeText}}</td>
+      <td nz-td>{{data.sendCount}}</td>
+      <td nz-td *ngIf="data.sendState == '0'">{{data.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td nz-td *ngIf="data.sendState == '2'">{{data.sendTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td *ngIf="data.smsType!='1'&&data.smsType!='2'" nz-td>{{data.contents}}</td>
+      <td *ngIf="data.smsType=='1'||data.smsType=='2'" nz-td>{{data.title}}</td>
+      <td nz-td> 
+          <span *ngIf="data.isHasUpTel" class="btn">
+              <a (click)="downPhoneNumber(data.id)">下载电话</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="btn">
+              <a [routerLink]="['../messageDetail',data.id,data.smsType]">查看</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span *ngIf="data.sendState == '0'" class="btn">
+              <a (click)="passMessage(data.id)">发送</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="btn">
+              <a nz-popconfirm nzTitle="是否删除该用户" (nzOnConfirm)="deleteData(data.id)" (nzOnCancel)="cancel()">删除</a>
+            </span>
+          <!-- <nz-divider nzType="vertical"></nz-divider>
+          <span class="btn">
+              <a [routerLink]="['..',{outlets: {right:['appointrReviewer',data.userId,data.userName,data.organizationName]}}]">短信充值</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="btn">
+              <a [routerLink]="['..',{outlets: {right:['appointrReviewer',data.userId,data.userName,data.organizationName]}}]">删除</a>
+          </span> -->
+      </td>
+    </tr>
+  </ng-template>
+</tbody> 
+</nz-table> 
+  </div>
+</div>
