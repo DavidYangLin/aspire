@@ -18,6 +18,7 @@ import { MessSentComponent } from './mess-sent/mess-sent.component';
 import { SelfLogComponent } from './self-log/self-log.component';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
 import { TimeSetComponent } from './time-set/time-set.component';
+import { CallPhoneComponent } from './call-phone/call-phone.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,6 @@ import { TimeSetComponent } from './time-set/time-set.component';
     NgZorroAntdModule
     
   ],
-  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent]
+  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent, CallPhoneComponent]
 })
 export class DashboardModule { }

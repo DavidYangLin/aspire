@@ -1,3 +1,4 @@
+import { CallPhoneComponent } from './call-phone/call-phone.component';
 import { RouterGuard } from './../router.guard';
 import { LogQueryComponent } from './log-query/log-query.component';
 import { KeySetComponent } from './sys-manage/key-set/key-set.component';
@@ -61,6 +62,9 @@ const routes: Routes = [
         },
         { path: 'messageDetail/:id/:type',
           component:MessageDetailComponent
+        },
+        { path: 'callPhone?:code?:state',
+          component:CallPhoneComponent
         },
         {
             path: '',
