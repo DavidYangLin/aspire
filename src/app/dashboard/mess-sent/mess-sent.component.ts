@@ -29,6 +29,8 @@ export class MessSentComponent implements OnInit {
   $summernote:any;
   title:any;
 
+  isloadNumber:boolean = false;
+
   locationData:Array<any> = [];
   selectCity:Array<any> = [];
   selectCountry:Array<any> = [];
@@ -160,6 +162,7 @@ export class MessSentComponent implements OnInit {
           this.arr.push(...arrPhone);
         }
         this.getData();
+        this.isloadNumber = true;
       }else{
         this.message.error(data.message);
       }
@@ -344,6 +347,7 @@ export class MessSentComponent implements OnInit {
     this.http.post('sms/SearchByCon',returnData)
     .subscribe((data:any)=>{
       if(data.status == 1){
+        this.isloadNumber = false;
         setTimeout(()=>{
           this.dataLabelCount = data.data;
           this.btnLoading = false;
@@ -365,6 +369,10 @@ export class MessSentComponent implements OnInit {
     }
     if(this.dataLabelCount==0){
       this.message.info('数据标签为0，不能发送，请先查询数据标签!');
+      return;
+    }
+    if(!this.isloadNumber){
+      this.message.info('请先导入号码!');
       return;
     }
     let arrPhone = [];

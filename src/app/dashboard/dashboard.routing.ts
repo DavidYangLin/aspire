@@ -63,7 +63,7 @@ const routes: Routes = [
         { path: 'messageDetail/:id/:type',
           component:MessageDetailComponent
         },
-        { path: 'callPhone?:code?:state',
+        { path: 'callPhone',
           component:CallPhoneComponent
         },
         {
