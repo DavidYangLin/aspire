@@ -1,4 +1,4 @@
-import { UserService } from './../../app-service.service';
+import { UserService, Broadcaster } from './../../app-service.service';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -16,7 +16,8 @@ export class CallPhoneComponent implements OnInit {
     private ActivatedRoute:ActivatedRoute,
     private http:HttpClient,
     private message:NzMessageService,
-    private user:UserService
+    private user:UserService,
+    private Broadcaster:Broadcaster
   ) { }
 
   ngOnInit() {
@@ -27,8 +28,8 @@ export class CallPhoneComponent implements OnInit {
     //初始化云呼叫中心
     (window as any).workbench = new (window as any).WorkbenchSdk({
       dom: 'workbench',
-      width: '280px',
-      height: '550px',
+      width: '100%',
+      height: '100%',
       instanceId: 'cde0c27d-1578-41c2-bc59-f8fbd7b27f50',
       ajaxPath: '/api/services/app/UserInfo/InitSdk',
       // ajaxType:'path',
@@ -72,6 +73,7 @@ export class CallPhoneComponent implements OnInit {
       }
     })
     // (window as any).workbench.changeVisible(true);
+    this.Broadcaster.broadcast('setContentPadd',true);
   }
 
   getCallToken(){
@@ -85,6 +87,10 @@ export class CallPhoneComponent implements OnInit {
     },(err:any)=>{
       this.message.error(err.message);
     })
+  }
+
+  ngOnDestroy(){
+    this.Broadcaster.broadcast('setContentPadd',false);
   }
 
 }

@@ -1,3 +1,4 @@
+import { Broadcaster } from './../app-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -19,6 +20,8 @@ import { SelfLogComponent } from './self-log/self-log.component';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
 import { TimeSetComponent } from './time-set/time-set.component';
 import { CallPhoneComponent } from './call-phone/call-phone.component';
+import { RechargeComponent } from './recharge/recharge.component';
+import { RechargeListComponent } from './recharge-list/recharge-list.component';
 
 @NgModule({
   imports: [
@@ -28,8 +31,7 @@ import { CallPhoneComponent } from './call-phone/call-phone.component';
     DashboardRoutingModule,
     RouterModule,
     NgZorroAntdModule
-    
   ],
-  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent, CallPhoneComponent]
+  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent, CallPhoneComponent, RechargeComponent, RechargeListComponent]
 })
 export class DashboardModule { }

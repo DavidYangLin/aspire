@@ -2,12 +2,20 @@
     <div class="titleDiv" nz-col nzSpan="24">
       <span class="spanTitle">代理商管理</span>
     </div>
-    <div nz-col nzSpan="24" style="text-align:right;">
+    <div nz-col nzSpan="12">
+        <nz-input-group nzSearch [nzSuffix]="suffixIconButton">
+            <input type="text" [(ngModel)]="page.keyWords" nz-input placeholder="input search text">
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button nz-button (click)="queryData()" nzType="primary" nzSearch><i nz-icon type="search"></i></button>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="12" style="text-align:right;">
         <button nz-button [nzType]="'primary'" (click)="showModal(false)"><span>添加代理商</span></button>
     </div>
     <div style="margin-top: 10px;" nz-col nzSpan="24">
         <nz-table #nzTable 
-        [nzData]="userData"
+        [nzData]="userData" 
         [nzTotal]="page.totalCount"
         [nzLoading]="_loading"
         [(nzPageIndex)]="page.pageIndex"

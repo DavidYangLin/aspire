@@ -1,0 +1,71 @@
+<div nz-row>
+  <div class="titleDiv" nz-col nzSpan="24">
+    <span class="spanTitle">充值中心</span>
+  </div>
+  <div nz-col nzSpan="24" style="text-align:right;">
+      <button *ngIf="!isAdmin" nz-button [routerLink]="['../recharge']" [nzType]="'primary'"><span>我要充值</span></button>&nbsp;
+      <a *ngIf="isAdmin" [routerLink]="['../../rechargeList']"><span>返回</span></a>
+  </div> 
+  <div style="margin-top: 10px;" nz-col nzSpan="24">
+      <nz-table #nzTable 
+      [nzData]="userData"
+      [nzTotal]="page.totalCount"
+      [nzLoading]="_loading" 
+      [(nzPageIndex)]="page.pageIndex"
+      (nzPageIndexChange)="refreshData()"
+      [nzFrontPagination]="false"
+      [nzPageSize]="5" >
+<thead nz-thead> 
+  <tr>
+    <th nz-th><span>充值用户</span></th>
+    <th nz-th><span>充值方式</span></th>
+    <th nz-th><span>充值类型</span></th>
+    <th nz-th><span>数量</span></th>
+    <th nz-th><span>金额</span></th>
+    <th nz-th><span>时间</span></th>
+    <th nz-th><span>状态</span></th>
+    <th *ngIf="isAdmin" nz-th><span>操作</span></th>
+  </tr>
+</thead>
+<tbody nz-tbody>
+  <ng-template ngFor let-data [ngForOf]="nzTable.data">
+    <tr nz-tbody-tr>
+      <td nz-td>{{data.userId}}</td>
+      <td nz-td>
+        <span *ngIf="data.rechargeWay==0">支付宝</span>
+        <span *ngIf="data.rechargeWay==1">微信</span>
+        <span *ngIf="data.rechargeWay==2">银行转账</span>
+      </td>
+      <td nz-td>
+        <span *ngIf="data.rechargeType==0">文字手机报</span>
+        <span *ngIf="data.rechargeType==1">图文手机报</span>
+        <span *ngIf="data.rechargeType==3">霸信</span>
+        <span *ngIf="data.rechargeType==4">闪信</span>
+        <span *ngIf="data.rechargeType==5">数据下载充值</span>
+      </td>
+      <td nz-td>{{data.rechargeNum}}</td>
+      <td nz-td>{{data.amount}}</td>
+      <td nz-td>{{data.creationTime}}</td>
+      <td nz-td>
+        <span *ngIf="data.status==0">充值中</span>
+        <span *ngIf="data.status==1">充值成功</span>
+      </td>
+      <td *ngIf="isAdmin" nz-td>
+          <span class="btn">
+              <a>查看</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span (click)="setRehcargeStatus('1')" class="btn">
+              <a>成功</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span (click)="setRehcargeStatus('2')" class="btn">
+              <a>失败</a>
+          </span>
+      </td>
+    </tr>
+  </ng-template>
+</tbody> 
+</nz-table>
+  </div>
+</div>

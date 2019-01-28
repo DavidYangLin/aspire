@@ -29,7 +29,7 @@
     <li *ngIf="!role.isAdmin" nz-menu-item>
         <span title> 
           <i class="anticon anticon-mail"></i>
-          <span routerLink="./messageSent">信息发送</span> 
+          <span routerLink="./messageSent">数据标签查询</span> 
         </span>
     </li>
     <li *ngIf="role.isAdmin" nz-submenu>
@@ -62,7 +62,13 @@
           <i class="anticon anticon-mail"></i>
           <span (click)="callPhone()">拨打电话</span> 
         </span> 
-      </li> -->
+    </li> -->
+    <li *ngIf="userId=='262fbbcb-afdd-4b1b-8e0e-56f894ea8ab0'" nz-menu-item>
+        <span title> 
+          <i class="anticon anticon-mail"></i>
+          <span routerLink="./rechargeList">充值中心</span> 
+        </span> 
+    </li>
   </ul>
 </div> 
 <div class="content">
@@ -71,6 +77,9 @@
           <li nz-submenu>
             <span title>
                 <nz-avatar [nzText]="text" nzSize="large" style="vertical-align: middle;background-color: #ee8100;"></nz-avatar>
+                <!-- <nz-badge [nzCount]="5">
+                    <a class="head-example"></a>
+                </nz-badge> -->
             </span>
             <ul style="width:80px;">
                 <li nz-menu-item (click)="loginOut()">注 销</li>
@@ -80,7 +89,7 @@
       <!-- <nz-avatar [nzText]="text" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>       -->
   </div>
   <nz-content class="main" style="padding:20px 20px 20px 20px;" >
-      <div  style="background:#fff;min-height: 350px; padding: 20px;">
+      <div [ngStyle]="{'padding':padd}" style="background:#fff;min-height: 350px;">
          <router-outlet ></router-outlet>
       </div>
     </nz-content>

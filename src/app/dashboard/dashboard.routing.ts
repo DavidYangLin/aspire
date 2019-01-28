@@ -15,6 +15,8 @@ import { MessSentComponent } from './mess-sent/mess-sent.component';
 import { SelfLogComponent } from './self-log/self-log.component';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
 import { TimeSetComponent } from './time-set/time-set.component';
+import { RechargeComponent } from './recharge/recharge.component';
+import { RechargeListComponent } from './recharge-list/recharge-list.component';
 
 const routes: Routes = [
     { path: '',
@@ -65,6 +67,14 @@ const routes: Routes = [
         },
         { path: 'callPhone',
           component:CallPhoneComponent
+        },
+        {
+          path:'rechargeList',
+          component:RechargeListComponent
+        },
+        {
+          path:'recharge',
+          component:RechargeComponent
         },
         {
             path: '',

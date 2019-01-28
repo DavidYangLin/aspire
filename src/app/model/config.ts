@@ -12,13 +12,13 @@ export class ConfigService {
     // apiFileUrl= 'https://aspire.w7w.cn/';
     // apiFile = 'https://aspire.w7w.cn';
 
-    apiUrl = 'http://api.zj-zcjd.com/api/services/app/';
-    apiFileUrl= 'http://api.zj-zcjd.com/';
-    apiFile = 'http://api.zj-zcjd.com'; 
+    // apiUrl = 'http://api.zj-zcjd.com/api/services/app/';
+    // apiFileUrl= 'http://api.zj-zcjd.com/';
+    // apiFile = 'http://api.zj-zcjd.com'; 
 
-    // apiUrl = 'http://localhost:6234/api/services/app/';
-    // apiFileUrl= 'http://localhost:6234/';
-    // apiFile = 'http://localhost:6234';  
+    apiUrl = 'http://localhost:6234/api/services/app/';
+    apiFileUrl= 'http://localhost:6234/';
+    apiFile = 'http://localhost:6234';  
     // 121.40.21.23:9090
     // 114.55.237.129:9021
     // apiUrl=environment.production==true?'http://114.55.237.129:9021/api/services/GPLM/':'http://test.gplm.com/api/services/GPLM/';

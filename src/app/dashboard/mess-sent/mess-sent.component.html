@@ -1,7 +1,7 @@
 <div nz-row>
     <nz-spin [nzSpinning]="isSpinning">
   <div class="titleDiv" nz-col nzSpan="24"> 
-    <span class="spanTitle">短信发送</span>
+    <span class="spanTitle">数据标签查询</span>
   </div>
   <div nz-col nzSpan="24" style="margin-top:10px;text-align: center">
     <h2>中国移动大数据标签</h2>
@@ -251,7 +251,8 @@
           </nz-form-item>
           <nz-form-item nz-row style="margin-bottom:8px;">
             <nz-form-control [nzSpan]="14" [nzOffset]="6">
-              <button nz-button (click)="sendMessage()" nzType="primary">发送</button>
+              <button nz-button (click)="sendMessage()" nzType="primary">发送</button>&nbsp;
+              <button nz-button (click)="sendLoadNumber()" [routerLink]="['../recharge']" [queryParams]="{flag:true}" nzType="default">下载号码</button>
             </nz-form-control>
           </nz-form-item>
         </form>

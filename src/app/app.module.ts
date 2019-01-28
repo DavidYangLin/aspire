@@ -13,7 +13,7 @@ import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { registerLocaleData, HashLocationStrategy, LocationStrategy, PathLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { LoginComponent } from './login/login.component';
-import { UserService, JwtInterceptorService } from './app-service.service';
+import { UserService, JwtInterceptorService, Broadcaster } from './app-service.service';
 
 registerLocaleData(zh);
 
@@ -46,7 +46,7 @@ const appRoutes:Routes = [
     NgZorroAntdModule,
     RouterModule.forRoot(appRoutes,{enableTracing:false})
   ],
-  providers: [{provide:LocationStrategy,useClass: HashLocationStrategy},{ provide: APP_BASE_HREF, useValue: '/' },{ provide: NZ_I18N, useValue: zh_CN },{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },UserService,ConfigService,CookieService],
+  providers: [{provide:LocationStrategy,useClass: HashLocationStrategy},{ provide: APP_BASE_HREF, useValue: '/' },{ provide: NZ_I18N, useValue: zh_CN },{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },UserService,ConfigService,CookieService,Broadcaster],
   bootstrap: [AppComponent]
 })
 export class AppModule { } 

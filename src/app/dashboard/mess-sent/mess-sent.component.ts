@@ -1,3 +1,4 @@
+import { Broadcaster } from './../../app-service.service';
 import { NzMessageService,UploadFile } from 'ng-zorro-antd';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
@@ -68,7 +69,7 @@ export class MessSentComponent implements OnInit {
   public location: any[] = null;
 
   validateForm: FormGroup;
-  constructor(private http:HttpClient,private message:NzMessageService,private elementRef:ElementRef,private config:ConfigService) { 
+  constructor(private Broadcaster:Broadcaster,private http:HttpClient,private message:NzMessageService,private elementRef:ElementRef,private config:ConfigService) { 
   }
 
   ngOnInit() {
@@ -492,6 +493,20 @@ export class MessSentComponent implements OnInit {
       }
     },(err:any)=>{
       this.message.error(err.message);
+    })
+  }
+
+  sendLoadNumber(){
+    this.Broadcaster.broadcast('getLoadNumberInfo',{
+      selectedSex:this.selectedSex,
+      selectedAge:this.selectedAge,
+      selectedTime:this.selectedTime,
+      radioValue:this.radioValue,
+      location:this.location,
+      selectedApp:this.selectedApp,
+      multipleValueApp:this.multipleValueApp,
+      selectedKey:this.selectedKey,
+      multipleValueKey:this.multipleValueKey
     })
   }
 

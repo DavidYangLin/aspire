@@ -78,7 +78,10 @@ export class AgentManageComponent implements OnInit {
   }
 
   refreshData(){
-    console.log(121)
+    this.getTableData();
+  }
+  queryData(){
+    this.page.pageIndex = 1;
     this.getTableData();
   }
   //列表操作

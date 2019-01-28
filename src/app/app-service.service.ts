@@ -13,7 +13,7 @@ import {
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 import { Observable,Subject, of, throwError } from 'rxjs';
-import { map, mergeMap, catchError, take } from 'rxjs/operators';
+import { map, mergeMap, catchError, take, filter } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -344,5 +344,55 @@ export class downLoadService {
 
   private createBasicMessage() {
     this.loadingId = this._msg.loading('正在下载文件', { nzDuration: 0 }).messageId;
+  }
+}
+
+interface BroadcastEvent {
+  key: any;
+  data?: any;
+}
+
+/**
+ * 
+ * 事件订阅-基于RxJS Subject
+ * @export
+ * @class Broadcaster
+ * example:
+  @Component({
+      selector: 'child'
+  })
+  export class ChildComponent {
+    constructor(private broadcaster: Broadcaster) {}
+    
+    registerStringBroadcast() {
+      this.broadcaster.on<string>('MyEvent')
+        .subscribe(message => {
+          ...
+        });
+    }
+
+    emitStringBroadcast() {
+      this.broadcaster.broadcast('MyEvent', 'some message');
+    }
+  }
+ */
+@Injectable()
+export class Broadcaster {
+  private _eventBus: Subject<BroadcastEvent>;
+
+  constructor() {
+    this._eventBus = new Subject<BroadcastEvent>();
+  }
+
+  broadcast(key: any, data?: any) {
+    this._eventBus.next({ key, data });
+  }
+
+  on<T>(key: any): Observable<T> {
+    return this._eventBus.asObservable()
+    .pipe(
+      filter((event:any) => event.key === key),
+      map((event:any) => <T>event.data)
+    )
   }
 }
