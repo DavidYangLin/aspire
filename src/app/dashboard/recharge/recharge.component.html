@@ -73,7 +73,7 @@
       <nz-form-item nz-row style="margin-bottom:8px;">
           <nz-form-control [nzSpan]="14" [nzOffset]="6">
               <!-- [disabled]="!validateForm.valid" -->
-            <button (click)="confirmRecharge()" nz-button nzType="primary">确定充值</button>
+            <button [disabled]="!validateForm.valid" (click)="confirmRecharge()" nz-button nzType="primary">确定充值</button>
           </nz-form-control>
         </nz-form-item>
     </form>
