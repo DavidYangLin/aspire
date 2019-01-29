@@ -30,7 +30,7 @@
 <tbody nz-tbody>
   <ng-template ngFor let-data [ngForOf]="nzTable.data">
     <tr nz-tbody-tr>
-      <td nz-td>{{data.userId}}</td>
+      <td nz-td>{{data.userName}}</td>
       <td nz-td>
         <span *ngIf="data.rechargeWay==0">支付宝</span>
         <span *ngIf="data.rechargeWay==1">微信</span>
@@ -51,8 +51,8 @@
         <span *ngIf="data.status==1">充值成功</span>
       </td>
       <td *ngIf="isAdmin" nz-td>
-          <span class="btn">
-              <a>查看</a>
+          <span (click)="showModalMess(data)" class="btn">
+              <a>充值</a>
           </span>
           <nz-divider nzType="vertical"></nz-divider>
           <span (click)="setRehcargeStatus('1')" class="btn">
@@ -69,3 +69,47 @@
 </nz-table>
   </div>
 </div>
+<nz-modal [(nzVisible)]="isVisibleMess" nzTitle="短信充值" (nzOnCancel)="handleCancelMess()" (nzOnOk)="reCharge()">
+  <div *ngIf="itemRecharging.rechargeType == 5">
+    <p>性别：
+        <nz-select [nzDisabled]="true" style="-width: 120px;" [(ngModel)]="itemRecharging.sex" name="sex">
+            <nz-option nzValue="0" nzLabel="男"></nz-option>
+            <nz-option nzValue="1" nzLabel="女"></nz-option>
+            <nz-option nzValue="2" nzLabel="不限"></nz-option>
+        </nz-select>
+    </p>
+    <p>年龄：
+        <nz-select [nzDisabled]="true" style="-width: 120px;" [(ngModel)]="itemRecharging.age" nzMode="multiple" name="age">
+            <nz-option nzValue="0" nzLabel="18-28"></nz-option>
+            <nz-option nzValue="1" nzLabel="29-38"></nz-option>
+            <nz-option nzValue="2" nzLabel="39-48"></nz-option>
+            <nz-option nzValue="3" nzLabel="49-58"></nz-option>
+            <nz-option nzValue="4" nzLabel="58以上"></nz-option>
+            <nz-option nzValue="5" nzLabel="不限"></nz-option>
+        </nz-select>
+    </p>
+    <p>范围：
+        <nz-radio-group [(ngModel)]="itemRecharging.range"  name="location1">
+            <label nz-radio nzValue="4">全国</label>
+            <label nz-radio nzValue="0">选择省</label>
+            <label nz-radio nzValue="1">选择市</label>
+            <label nz-radio nzValue="2">选择区</label> 
+          </nz-radio-group>
+    </p>
+    <p>归属地：{{itemRecharging.loc}}
+    </p>
+    <p>APP：{{itemRecharging.industryApp}}</p>
+    <p>关键字：{{itemRecharging.keywords}}</p>
+  </div>
+  <p>充值类型：{{itemRecharging.rechargeType}}
+      <nz-select style="width: 200px;" [(ngModel)]="itemRecharging.rechargeType" name="type" nzAllowClear>
+              <nz-option nzValue="0" nzLabel="文字手机报"></nz-option>
+              <nz-option nzValue="1" nzLabel="图文手机报"></nz-option>
+              <!-- <nz-option nzValue="2" nzLabel="视频手机报"></nz-option> -->
+              <nz-option nzValue="3" nzLabel="霸信"></nz-option>
+              <nz-option nzValue="4" nzLabel="闪信"></nz-option>
+              <nz-option nzValue="4" nzLabel="数据下载充值"></nz-option>
+      </nz-select>  
+  </p>
+  <p>充值数量： <input nz-input disabled="true" [(ngModel)]="itemRecharging.amount" style="width: 200px;" placeholder="请输入充值数量"></p>
+</nz-modal>

@@ -31,9 +31,9 @@
         <nz-form-label [nzSm]="6" [nzXs]="24">充值数量</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <input (ngModelChange)="test()" formControlName="rechargeCount" name="rechargeCount" nz-input style="width:200px">
-          <p *ngIf="validateForm.controls.rechargeType.value='0'||validateForm.controls.rechargeType.value='3'||validateForm.controls.rechargeType.value='4'">文字手机报，霸信，闪信0.15元每条，每次最低充值限额十万条</p>
-          <p *ngIf="validateForm.controls.rechargeType.value='1'">图文手机报0.5元每条，每次最低充值限额十万条</p>
-          <p *ngIf="validateForm.controls.rechargeType.value='5'">数据下载15元每条</p>
+          <p *ngIf="validateForm.controls.rechargeType.value=='0'||validateForm.controls.rechargeType.value=='3'||validateForm.controls.rechargeType.value=='4'">文字手机报，霸信，闪信0.15元每条，每次最低充值限额十万条</p>
+          <p *ngIf="validateForm.controls.rechargeType.value=='1'">图文手机报0.5元每条，每次最低充值限额十万条</p>
+          <p *ngIf="validateForm.controls.rechargeType.value=='5'">数据下载15元每条</p>
         </nz-form-control>
       </nz-form-item>
       <!-- <nz-form-item *ngIf="validateForm.controls.rechargeType.value=='1'">
@@ -72,7 +72,8 @@
       </nz-form-item>
       <nz-form-item nz-row style="margin-bottom:8px;">
           <nz-form-control [nzSpan]="14" [nzOffset]="6">
-            <button [disabled]="!validateForm.valid" (click)="confirmRecharge()" nz-button nzType="primary">确定充值</button>
+              <!-- [disabled]="!validateForm.valid" -->
+            <button (click)="confirmRecharge()" nz-button nzType="primary">确定充值</button>
           </nz-form-control>
         </nz-form-item>
     </form>

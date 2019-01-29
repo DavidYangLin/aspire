@@ -20,6 +20,10 @@ export class RechargeListComponent implements OnInit {
     // totalCount:0,
     // agentUserId:''
   }
+  isVisibleMess = false;
+  rechargeType:any;
+  itemRecharging:any = {};
+
   
   constructor(
     private user:UserService,
@@ -82,4 +86,31 @@ export class RechargeListComponent implements OnInit {
     
   }
 
+  showModalMess(item:any): void {
+    this.isVisibleMess = true;
+    setTimeout(() => {
+      this.itemRecharging = item;      
+    }, 100);
+  }
+
+  handleCancelMess(): void {
+    this.isVisibleMess = false;
+  }
+
+  reCharge(){
+    this.http.request('POST','userInfo/AgentRechargeSms',
+    {params:{smsType:this.itemRecharging.rechargeType.toString(),userId:this.itemRecharging.userId,giveCount:this.itemRecharging.rechargeNum.toString()}})
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        this.message.success('充值成功!');
+        this._loading = true;
+        this.getTableData();
+      }else{
+        this.message.error(data.message);
+      }
+      this.isVisibleMess = false;      
+    },(err:any)=>{
+      this.message.error(err.message);
+    })
+  }
 }

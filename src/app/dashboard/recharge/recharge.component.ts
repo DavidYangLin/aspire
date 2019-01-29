@@ -25,6 +25,9 @@ export class RechargeComponent implements OnInit {
   validateForm:FormGroup;
   isLoadNumber:string;
   rechargeTypeDisable:boolean = false;
+  private messageSendQuery:any;
+  that:any;
+  unsubscribe:any;
   constructor(
     private http:HttpClient,
     private message:NzMessageService,
@@ -34,12 +37,14 @@ export class RechargeComponent implements OnInit {
     private Broadcaster:Broadcaster
   ) { 
     this.isLoadNumber = this.router.snapshot.queryParams.flag;
+    this.messageSendQuery = JSON.parse(this.router.snapshot.queryParams.data);
     if(this.isLoadNumber == 'true'){
-      // this.rechargeType = '1'
       this.rechargeTypeDisable = true;
     }
-    this.Broadcaster.on('getLoadNumberInfo').subscribe((data:any)=>{
-      console.log(data);
+    this.unsubscribe = this.Broadcaster.on('getLoadNumberInfo').subscribe((data:any)=>{
+      // this.messageSendQuery12.test = data.a; 
+      console.log('212102010211111111111111111111111111111111111');
+      console.log(this); 
     })
   }
 
@@ -52,7 +57,7 @@ export class RechargeComponent implements OnInit {
       // email: [ null, [ ] ]
     });
     if(this.isLoadNumber == 'true'){
-      this.validateForm.controls.rechargeType.setValue('1');
+      this.validateForm.controls.rechargeType.setValue('5');
       if(!this.validateForm.controls.email){
         this.validateForm.addControl('email',new FormControl('',[Validators.required,Validators.email]))
       }
@@ -86,11 +91,16 @@ export class RechargeComponent implements OnInit {
   }
 
   handleOk(){
-    this.http.post('sms/Recharge',{
+    let body = {
       rechargeType:this.validateForm.controls.rechargeType.value,
       rechargeWay:this.validateForm.controls.rechargeMode.value,
       rechargeNum:this.validateForm.controls.rechargeCount.value,
-      amount:this.validateForm.controls.recharge.value})
+      amount:this.validateForm.controls.recharge.value
+    }
+    if(body.rechargeType == '5'){
+      body = Object.assign(body,this.messageSendQuery);
+    }
+    this.http.post('sms/Recharge',body)
     .subscribe((data:any)=>{
       if(data.status == 1){
         this.isVisible == false;
@@ -107,7 +117,7 @@ export class RechargeComponent implements OnInit {
     })
   }
 
-  test(value){
+  test(){
     if(this.validateForm.controls.rechargeType.value == '0'||this.validateForm.controls.rechargeType.value == '3'||this.validateForm.controls.rechargeType.value == '4'){
       this.validateForm.controls.recharge.setValue(this.validateForm.controls.rechargeCount.value*0.15)
     }else if(this.validateForm.controls.rechargeType.value == '1'){
@@ -117,5 +127,9 @@ export class RechargeComponent implements OnInit {
     }else{
       this.message.info('请先选择充值类型!');
     }
+  }
+
+  ngOnDestroy(){
+    // this.unsubscribe.unsubscribe();
   }
 }

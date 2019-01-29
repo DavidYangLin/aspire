@@ -94,32 +94,36 @@
       <nz-form-item *ngIf="appPermission">
         <nz-form-label [nzSm]="6" [nzXs]="24">APP</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-select style="-width: 120px;" [(ngModel)]="selectedApp" (ngModelChange)="appChange($event)" name="app" nzAllowClear nzPlaceHolder="请选择行业">
-            <nz-option *ngFor="let option of appOptions" [nzValue]="option.id" [nzLabel]="option.name"></nz-option>
+          <nz-select style="-width: 120px;" [compareWith]="compareFn" [(ngModel)]="selectedApp" (ngModelChange)="appChange($event)" name="app" nzAllowClear nzPlaceHolder="请选择行业">
+            <!-- <nz-option *ngFor="let option of appOptions" [nzValue]="option.id" [nzLabel]="option.name"></nz-option> -->
+            <nz-option *ngFor="let option of appOptions" [nzValue]="option" [nzLabel]="option.name"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item *ngIf="appPermission">
         <nz-form-label [nzSm]="6" [nzXs]="24"></nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-select style="width: 100%" [(ngModel)]="multipleValueApp" name="childApp1" nzMode="multiple" nzPlaceHolder="请选择子行业">
-            <nz-option *ngFor="let option of listOfAppOption" [nzLabel]="option.childName" [nzValue]="option.id"></nz-option>
+          <nz-select style="width: 100%" [compareWith]="compareFn" [(ngModel)]="multipleValueApp" name="childApp1" nzMode="multiple" nzPlaceHolder="请选择子行业">
+            <!-- <nz-option *ngFor="let option of listOfAppOption" [nzLabel]="option.childName" [nzValue]="option.id"></nz-option> -->
+            <nz-option *ngFor="let option of listOfAppOption" [nzLabel]="option.childName" [nzValue]="option"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item *ngIf="keyPermission">
         <nz-form-label [nzSm]="6" [nzXs]="24">关键字</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24"> 
-            <nz-select style="-width: 120px;" [(ngModel)]="selectedKey" (ngModelChange)="keyChange($event)" name="key" nzAllowClear nzPlaceHolder="请选择关键字">
-              <nz-option *ngFor="let option of keyOptions" [nzValue]="option.id" [nzLabel]="option.name"></nz-option>
+            <nz-select style="-width: 120px;" [compareWith]="compareFn" [(ngModel)]="selectedKey" (ngModelChange)="keyChange($event)" name="key" nzAllowClear nzPlaceHolder="请选择关键字">
+              <!-- <nz-option *ngFor="let option of keyOptions" [nzValue]="option.id" [nzLabel]="option.name"></nz-option> -->
+              <nz-option *ngFor="let option of keyOptions" [nzValue]="option" [nzLabel]="option.name"></nz-option>
             </nz-select>
           </nz-form-control>
       </nz-form-item>
       <nz-form-item *ngIf="keyPermission">
           <nz-form-label [nzSm]="6" [nzXs]="24"></nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-select style="width: 100%" [(ngModel)]="multipleValueKey" name="childApp2" nzMode="multiple" nzPlaceHolder="请选择内容">
-              <nz-option *ngFor="let option of listOfKeyOption" [nzLabel]="option.childName" [nzValue]="option.id"></nz-option>
+            <nz-select style="width: 100%" [compareWith]="compareFn" [(ngModel)]="multipleValueKey" name="childApp2" nzMode="multiple" nzPlaceHolder="请选择内容">
+              <!-- <nz-option *ngFor="let option of listOfKeyOption" [nzLabel]="option.childName" [nzValue]="option.id"></nz-option> -->
+              <nz-option *ngFor="let option of listOfKeyOption" [nzLabel]="option.childName" [nzValue]="option"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -252,7 +256,8 @@
           <nz-form-item nz-row style="margin-bottom:8px;">
             <nz-form-control [nzSpan]="14" [nzOffset]="6">
               <button nz-button (click)="sendMessage()" nzType="primary">发送</button>&nbsp;
-              <button nz-button (click)="sendLoadNumber()" [routerLink]="['../recharge']" [queryParams]="{flag:true}" nzType="default">下载号码</button>
+              <!-- <button nz-button (click)="sendLoadNumber()" [routerLink]="['../recharge']" [queryParams]="{flag:true}" nzType="default">下载号码</button> -->
+              <button nz-button (click)="sendLoadNumber()" nzType="default">下载号码</button>
             </nz-form-control>
           </nz-form-item>
         </form>

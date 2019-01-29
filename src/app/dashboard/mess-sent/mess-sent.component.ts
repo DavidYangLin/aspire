@@ -6,6 +6,7 @@ import { HttpRequest, HttpResponse, HttpClient, HttpParams } from '@angular/comm
 import { fromEvent, Observable } from 'rxjs';
 import * as _ from 'lodash';
 import { ConfigService } from '../../model/config';
+import { Router, ActivatedRoute } from '@angular/router';
 declare var $:any;
 
 @Component({
@@ -69,7 +70,14 @@ export class MessSentComponent implements OnInit {
   public location: any[] = null;
 
   validateForm: FormGroup;
-  constructor(private Broadcaster:Broadcaster,private http:HttpClient,private message:NzMessageService,private elementRef:ElementRef,private config:ConfigService) { 
+  constructor(
+    private Broadcaster:Broadcaster,
+    private http:HttpClient,
+    private message:NzMessageService,
+    private elementRef:ElementRef,
+    private config:ConfigService,
+    private route:Router,
+    private active:ActivatedRoute) { 
   }
 
   ngOnInit() {
@@ -265,11 +273,12 @@ export class MessSentComponent implements OnInit {
 
   appChange(value:any){
     this.multipleValueApp = [];
-    this.getAppChild(value,false);
+    // this.getAppChild(value,false);
+    this.getAppChild(value.id,false);
   }
   keyChange(value:any){
     this.multipleValueKey = [];
-    this.getAppChild(value,true);
+    this.getAppChild(value.id,true);
   }
   locationChange(value:any){
     this.location = [];
@@ -323,14 +332,24 @@ export class MessSentComponent implements OnInit {
         return;
       }
     }
-    this.btnLoading = true;    
+    this.btnLoading = true;
+    let multipleValueApp = [];
+     _.forEach(this.multipleValueApp,(item:any)=>{
+      multipleValueApp.push(item.id);
+    })
+    let multipleValueKey = [];
+      _.forEach(this.multipleValueKey,(item:any)=>{
+        multipleValueKey.push(item.id);
+    })
     var returnData:any = {
       sex: this.selectedSex,
       age: this.selectedAge,
-      industryId: this.selectedApp,
-      industryChildList: this.multipleValueApp,
-      keywordId: this.selectedKey,
-      keywordChildList: this.multipleValueKey,
+      industryId: this.selectedApp.id,
+      // industryChildList: this.multipleValueApp,
+      industryChildList: multipleValueApp,
+      keywordId: this.selectedKey.id,
+      // keywordChildList: this.multipleValueKey,
+      keywordChildList: multipleValueKey,
       deadlineSet:this.selectedTime
     }
     if(this.radioValue == '0'){
@@ -387,13 +406,23 @@ export class MessSentComponent implements OnInit {
       return;
     }
     this.importPhone.push(...arrPhone);
+    let multipleValueApp = [];
+      _.forEach(this.multipleValueApp,(item:any)=>{
+      multipleValueApp.push(item.id);
+    })
+    let multipleValueKey = [];
+    _.forEach(this.multipleValueKey,(item:any)=>{
+      multipleValueKey.push(item.id);
+  })
     var returnData:any = {
       sex:this.selectedSex,
       age:this.selectedAge,
-      industryId:this.selectedApp,
-      industryChildList:this.multipleValueApp,
-      keywordId: this.selectedKey,
-      keywordChildList:this.multipleValueKey,
+      industryId:this.selectedApp.id,
+      // industryChildList:this.multipleValueApp,
+      industryChildList:multipleValueApp,
+      keywordId: this.selectedKey.id,
+      // keywordChildList:this.multipleValueKey,
+      keywordChildList:multipleValueKey,
       smsType:this.selectedType,
       sendCount:this.sendCount,
       mobliePhones:this.importPhone,
@@ -427,6 +456,7 @@ export class MessSentComponent implements OnInit {
         return;
       }
     }
+    // console.log(returnData);
     this.isSpinning = true;    
     this.http.post('sms/SubmitSendTask',returnData)
     .subscribe((data:any)=>{
@@ -497,17 +527,78 @@ export class MessSentComponent implements OnInit {
   }
 
   sendLoadNumber(){
-    this.Broadcaster.broadcast('getLoadNumberInfo',{
-      selectedSex:this.selectedSex,
-      selectedAge:this.selectedAge,
-      selectedTime:this.selectedTime,
-      radioValue:this.radioValue,
-      location:this.location,
-      selectedApp:this.selectedApp,
-      multipleValueApp:this.multipleValueApp,
-      selectedKey:this.selectedKey,
-      multipleValueKey:this.multipleValueKey
+    if(this.radioValue != '4' && (this.location == null || this.location.length == 0)){
+      this.message.info('请先选择归属地!');
+      return;
+    }
+    if(!this.selectedSex){
+      this.message.info('请先选择性别!');
+      return;
+    }
+    if(!this.selectedAge){
+      this.message.info('请先选择年龄!');
+      return;
+    }
+    if(!this.selectedTime){
+      this.message.info('请先选择期限!');
+      return;
+    }
+    if(this.appPermission){
+      if(this.multipleValueApp.length > 0 && this.multipleValueApp.length < 5){
+        this.message.info('APP应不少于5个!');
+        return;
+      }
+    }
+    if(this.keyPermission){
+      if(this.multipleValueApp.length == 0&&this.multipleValueKey.length ==0){
+        this.message.info('APP或关键词至少需要选择一项!');
+        return;
+      }
+    }
+    
+    let appChild = [];
+    _.forEach(this.multipleValueApp,(item:any)=>{
+      appChild.push(item.childName)
     })
+    let keyChild = [];
+    _.forEach(this.multipleValueKey,(item:any)=>{
+      keyChild.push(item.childName)
+    })
+    let app = this.selectedApp.name + '|' + appChild.join(',');
+    let keywords = this.selectedKey.name + '|' + keyChild.join(',');
+
+    let location:any;
+    if(this.radioValue == '0'){
+      location = this.location[0];
+    }else if(this.radioValue == '1'){
+      location = this.location[0] + '|' + this.selectCity.join(',');
+    }else if(this.radioValue == '2'){
+      location = this.location[0] + '|' + this.location[1] + '|' + this.selectCountry.join(',');
+    }else{
+      location = '000000';
+    }
+    let data = {
+      sex:this.selectedSex,
+      age:this.selectedAge[0],
+      range:this.radioValue,
+      loc:location,
+      industryApp:app,
+      keywords:keywords,
+    }
+    // this.Broadcaster.broadcast('getLoadNumberInfo',{
+    //   sex:this.selectedSex,
+    //   age:this.selectedAge,
+    //   range:this.radioValue,
+    //   loc:location,
+    //   industryApp:app,
+    //   keywords:keywords,
+    // })
+    // this.Broadcaster.broadcast('getLoadNumberInfo',{
+    //   a:'1',
+    //   b:'2'
+    // })
+    this.route.navigate(['../recharge'],{queryParams:{flag:true,data:JSON.stringify(data)},relativeTo:this.active});
+
   }
 
   uploader = (item: any) => {
@@ -578,4 +669,6 @@ export class MessSentComponent implements OnInit {
       $('#summernote').summernote('destroy');
     }
   }
+
+  compareFn = (o1: any, o2: any) => o1 && o2 ? o1.id === o2.id : o1 === o2;
 }
