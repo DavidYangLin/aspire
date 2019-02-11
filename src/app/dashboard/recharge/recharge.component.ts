@@ -37,14 +37,16 @@ export class RechargeComponent implements OnInit {
     private Broadcaster:Broadcaster
   ) { 
     this.isLoadNumber = this.router.snapshot.queryParams.flag;
-    this.messageSendQuery = JSON.parse(this.router.snapshot.queryParams.data);
+    if(this.router.snapshot.queryParams.data){
+      this.messageSendQuery = JSON.parse(this.router.snapshot.queryParams.data);
+    }
     if(this.isLoadNumber == 'true'){
       this.rechargeTypeDisable = true;
     }
     this.unsubscribe = this.Broadcaster.on('getLoadNumberInfo').subscribe((data:any)=>{
       // this.messageSendQuery12.test = data.a; 
-      console.log('212102010211111111111111111111111111111111111');
-      console.log(this); 
+      // console.log('212102010211111111111111111111111111111111111');
+      // console.log(this); 
     })
   }
 

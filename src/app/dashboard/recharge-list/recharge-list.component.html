@@ -50,19 +50,21 @@
         <span *ngIf="data.status==0">充值中</span>
         <span *ngIf="data.status==1">充值成功</span>
       </td>
-      <td *ngIf="isAdmin" nz-td>
+      <td *ngIf="isAdmin&&data.status==0" nz-td>
           <span (click)="showModalMess(data)" class="btn">
               <a>充值</a>
           </span>
           <nz-divider nzType="vertical"></nz-divider>
-          <span (click)="setRehcargeStatus('1')" class="btn">
+          <span (click)="setRehcargeStatus(data.id,'1')" class="btn">
               <a>成功</a>
           </span>
           <nz-divider nzType="vertical"></nz-divider>
-          <span (click)="setRehcargeStatus('2')" class="btn">
+          <span (click)="setRehcargeStatus(data.id,'2')" class="btn">
               <a>失败</a>
           </span>
       </td>
+      <td *ngIf="!isAdmin||data.status!=0">
+        </td>
     </tr>
   </ng-template>
 </tbody> 
@@ -101,15 +103,20 @@
     <p>APP：{{itemRecharging.industryApp}}</p>
     <p>关键字：{{itemRecharging.keywords}}</p>
   </div>
-  <p>充值类型：{{itemRecharging.rechargeType}}
-      <nz-select style="width: 200px;" [(ngModel)]="itemRecharging.rechargeType" name="type" nzAllowClear>
+  <p>充值类型：
+    <span *ngIf="itemRecharging.rechargeType=='0'">文字手机报</span>
+    <span *ngIf="itemRecharging.rechargeType=='1'">图文手机报</span>
+    <span *ngIf="itemRecharging.rechargeType=='3'">霸信</span>
+    <span *ngIf="itemRecharging.rechargeType=='4'">闪信</span>
+    <span *ngIf="itemRecharging.rechargeType=='5'">数据下载充值</span>
+
+      <!-- <nz-select style="width: 200px;" [(ngModel)]="itemRecharging.rechargeType" name="type" nzAllowClear>
               <nz-option nzValue="0" nzLabel="文字手机报"></nz-option>
               <nz-option nzValue="1" nzLabel="图文手机报"></nz-option>
-              <!-- <nz-option nzValue="2" nzLabel="视频手机报"></nz-option> -->
               <nz-option nzValue="3" nzLabel="霸信"></nz-option>
               <nz-option nzValue="4" nzLabel="闪信"></nz-option>
-              <nz-option nzValue="4" nzLabel="数据下载充值"></nz-option>
-      </nz-select>  
+              <nz-option nzValue=5 nzLabel="数据下载充值"></nz-option>
+      </nz-select>   -->
   </p>
   <p>充值数量： <input nz-input disabled="true" [(ngModel)]="itemRecharging.amount" style="width: 200px;" placeholder="请输入充值数量"></p>
 </nz-modal>

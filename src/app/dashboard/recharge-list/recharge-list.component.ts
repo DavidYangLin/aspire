@@ -76,6 +76,7 @@ export class RechargeListComponent implements OnInit {
         this.message.error('出错了!');
       }
       this._loading = false;
+      this.getTableData();
     },(err:any)=>{
       this.message.error(err.message);
       this._loading = false;      
@@ -83,7 +84,7 @@ export class RechargeListComponent implements OnInit {
   }
 
   refreshData(){
-    
+    this.getTableData();
   }
 
   showModalMess(item:any): void {
