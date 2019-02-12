@@ -22,6 +22,7 @@ import { TimeSetComponent } from './time-set/time-set.component';
 import { CallPhoneComponent } from './call-phone/call-phone.component';
 import { RechargeComponent } from './recharge/recharge.component';
 import { RechargeListComponent } from './recharge-list/recharge-list.component';
+import { BatchCallComponent } from './batch-call/batch-call.component';
 
 @NgModule({
   imports: [
@@ -32,6 +33,6 @@ import { RechargeListComponent } from './recharge-list/recharge-list.component';
     RouterModule,
     NgZorroAntdModule
   ],
-  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent, CallPhoneComponent, RechargeComponent, RechargeListComponent]
+  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent, CallPhoneComponent, RechargeComponent, RechargeListComponent, BatchCallComponent]
 })
 export class DashboardModule { }

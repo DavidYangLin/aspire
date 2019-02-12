@@ -72,15 +72,19 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  callPhone(){
-    this.getCode();
+  callPhone(flag:boolean){
+    this.getCode(flag);
   }
 
-  getCode(){
+  getCode(flag:boolean){
     this.http.post('UserInfo/AccessToken',{})
     .subscribe((data:any)=>{
       if(data.status == 1){
-        this.router.navigate(['callPhone'],{relativeTo:this.route});        
+        if(!flag){
+          this.router.navigate(['callPhone'],{relativeTo:this.route});        
+        }else{
+          this.router.navigate(['batchCall/true'],{relativeTo:this.route});        
+        }
       }else{
         // this.message.error(data.message);
         if(data.code == 'E001'){

@@ -1,8 +1,8 @@
 import { UserService, Broadcaster } from './../../app-service.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, UploadXHRArgs } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-call-phone',
@@ -11,6 +11,17 @@ import { NzMessageService } from 'ng-zorro-antd';
 })
 export class CallPhoneComponent implements OnInit {
   code:string;
+  showFlag:string;
+  _loading:boolean;
+  userData:Array<any>;
+
+  page:any = {
+    pageIndex:1,
+    pageSize:5,
+    keyWords:'',
+    totalCount:0,
+    sendState:'3'
+  }
 
   constructor(
     private ActivatedRoute:ActivatedRoute,
@@ -18,7 +29,9 @@ export class CallPhoneComponent implements OnInit {
     private message:NzMessageService,
     private user:UserService,
     private Broadcaster:Broadcaster
-  ) { }
+  ) { 
+    this.showFlag = this.ActivatedRoute.snapshot.queryParamMap.get('flag');
+  }
 
   ngOnInit() {
     this.code = this.ActivatedRoute.snapshot.queryParamMap.get('code');
@@ -73,6 +86,13 @@ export class CallPhoneComponent implements OnInit {
       }
     })
     // (window as any).workbench.changeVisible(true);
+    if(this.showFlag){
+      (window as any).workbench.changeVisible(false);
+      this._loading = true;
+      this.getTableData();
+    }else{
+      // (window as any).workbench.changeVisible(true);
+    }
     this.Broadcaster.broadcast('setContentPadd',true);
   }
 
@@ -87,6 +107,61 @@ export class CallPhoneComponent implements OnInit {
     },(err:any)=>{
       this.message.error(err.message);
     })
+  }
+
+  customReq = (item:UploadXHRArgs)=>{
+    const formData = new FormData();
+    formData.append('file',item.file as any);
+
+    return this.http.post('sms/ImportMobilePhone',formData)
+    .subscribe((data:any)=>{
+      if(event instanceof HttpResponse){
+        this.message.success('上传成功!');
+        this._loading = true;
+        this.getTableData();
+      }
+    },(err)=>{
+      this.message.error('上传失败!');
+    })
+  }
+
+  getTableData(){
+    this.http.post('sms/QueryUserPhone',this.page)
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        this.userData = data.data.list;
+        this.page.totalCount = data.data.totalCount;
+        this.page.pageIndex = data.data.pageIndex;
+      }else{
+        this.message.error('出错了!');
+      }
+      this._loading = false;
+    },(err:any)=>{
+      this.message.error(err.message);
+      this._loading = false;      
+    })
+  }
+
+  refreshData(){
+    this.getTableData();
+  }
+
+  importExcelData(){
+    this.http.post('sms/ImportMobilePhone',this.page)
+    .subscribe((data:any)=>{
+      if(data.status==1){
+      }else{
+        this.message.error('出错了!');
+      }
+      this._loading = false;
+    },(err:any)=>{
+      this.message.error(err.message);
+      this._loading = false;      
+    })
+  }
+
+  callPhone(callee:string){
+    (window as any).workbench.call(callee,'auto','',false);
   }
 
   ngOnDestroy(){

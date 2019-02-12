@@ -68,6 +68,9 @@ const routes: Routes = [
         { path: 'callPhone',
           component:CallPhoneComponent
         },
+        { path: 'batchCall/:flag',
+          component:CallPhoneComponent
+        },
         {
           path:'rechargeList',
           component:RechargeListComponent
