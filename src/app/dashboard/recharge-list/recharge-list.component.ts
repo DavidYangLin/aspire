@@ -99,8 +99,8 @@ export class RechargeListComponent implements OnInit {
   }
 
   reCharge(){
-    this.http.request('POST','userInfo/AgentRechargeSms',
-    {params:{smsType:this.itemRecharging.rechargeType.toString(),userId:this.itemRecharging.userId,giveCount:this.itemRecharging.rechargeNum.toString()}})
+    this.http.request('POST','userInfo/RechargeSms',
+    {params:{smsType:this.itemRecharging.rechargeType.toString(),userId:this.itemRecharging.userId,rechargeCount:this.itemRecharging.rechargeNum.toString()}})
     .subscribe((data:any)=>{
       if(data.status==1){
         this.message.success('充值成功!');

@@ -344,10 +344,10 @@ export class MessSentComponent implements OnInit {
     var returnData:any = {
       sex: this.selectedSex,
       age: this.selectedAge,
-      industryId: this.selectedApp.id,
+      industryId: this.selectedApp ? this.selectedApp.id:'',
       // industryChildList: this.multipleValueApp,
       industryChildList: multipleValueApp,
-      keywordId: this.selectedKey.id,
+      keywordId: this.selectedKey ? this.selectedKey.id:'' ,
       // keywordChildList: this.multipleValueKey,
       keywordChildList: multipleValueKey,
       deadlineSet:this.selectedTime

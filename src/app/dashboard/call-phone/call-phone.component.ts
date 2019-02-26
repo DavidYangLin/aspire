@@ -14,6 +14,8 @@ export class CallPhoneComponent implements OnInit {
   showFlag:string;
   _loading:boolean;
   userData:Array<any>;
+  isVisibleMess:boolean = false;
+  notes:string;
 
   page:any = {
     pageIndex:1,
@@ -30,7 +32,7 @@ export class CallPhoneComponent implements OnInit {
     private user:UserService,
     private Broadcaster:Broadcaster
   ) { 
-    this.showFlag = this.ActivatedRoute.snapshot.queryParamMap.get('flag');
+    this.showFlag = this.ActivatedRoute.snapshot.paramMap.get('flag');
   }
 
   ngOnInit() {
@@ -41,8 +43,8 @@ export class CallPhoneComponent implements OnInit {
     //初始化云呼叫中心
     (window as any).workbench = new (window as any).WorkbenchSdk({
       dom: 'workbench',
-      width: '100%',
-      height: '100%',
+      width: '280px',
+      height: '550px',
       instanceId: 'cde0c27d-1578-41c2-bc59-f8fbd7b27f50',
       ajaxPath: '/api/services/app/UserInfo/InitSdk',
       // ajaxType:'path',
@@ -85,9 +87,9 @@ export class CallPhoneComponent implements OnInit {
         console.log('这里是onHangUp事件，type = ', type)
       }
     })
-    // (window as any).workbench.changeVisible(true);
+    (window as any).workbench.changeVisible(true);
     if(this.showFlag){
-      (window as any).workbench.changeVisible(false);
+      // (window as any).workbench.changeVisible(false);
       this._loading = true;
       this.getTableData();
     }else{
@@ -112,14 +114,22 @@ export class CallPhoneComponent implements OnInit {
   customReq = (item:UploadXHRArgs)=>{
     const formData = new FormData();
     formData.append('file',item.file as any);
-
-    return this.http.post('sms/ImportMobilePhone',formData)
-    .subscribe((data:any)=>{
-      if(event instanceof HttpResponse){
+    return this.http.post('api/File/UpFile',formData,{params:{UpFlag:'3'}})
+    .subscribe((event:any)=>{
+      if(event.status == 1){
         this.message.success('上传成功!');
         this._loading = true;
+        item.onSuccess(event, item.file, event);
         this.getTableData();
+      }else{
+        setTimeout(()=>{
+          item.onError(event, item.file);
+        })
+        this.message.error(event.message);
       }
+      // if(event instanceof HttpResponse){
+
+      // }
     },(err)=>{
       this.message.error('上传失败!');
     })
@@ -146,10 +156,31 @@ export class CallPhoneComponent implements OnInit {
     this.getTableData();
   }
 
-  importExcelData(){
-    this.http.post('sms/ImportMobilePhone',this.page)
+  // importExcelData(){
+  //   this.http.post('api/File/UpFile',{},{params:{upFlag:'3'}})
+  //   .subscribe((data:any)=>{
+  //     if(data.status==1){
+  //     }else{
+  //       this.message.error('出错了!');
+  //     }
+  //     this._loading = false;
+  //   },(err:any)=>{
+  //     this.message.error(err.message);
+  //     this._loading = false;      
+  //   }) 
+  // }
+
+  callPhone(callee:string){
+    (window as any).workbench.call(callee,'auto','',false);
+  }
+
+  deletePhone(id:string){
+    this._loading = true;
+    this.http.post('',{},{params:{id:id}})
     .subscribe((data:any)=>{
       if(data.status==1){
+        this.message.success('删除成功!');
+        this.getTableData();
       }else{
         this.message.error('出错了!');
       }
@@ -160,8 +191,27 @@ export class CallPhoneComponent implements OnInit {
     })
   }
 
-  callPhone(callee:string){
-    (window as any).workbench.call(callee,'auto','',false);
+  writeNote(){
+    this.isVisibleMess = true;
+  }
+
+  handleCancel(){
+    this.isVisibleMess = false;
+  }
+
+  handleOk(){
+    this.http.post('',{})
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        this.message.success('保存成功!');
+        this.getTableData();
+        this.isVisibleMess = false;
+      }else{
+        this.message.error('出错了!');
+      }
+    },(err:any)=>{
+      this.message.error(err.message);
+    })
   }
 
   ngOnDestroy(){
