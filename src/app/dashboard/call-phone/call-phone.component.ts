@@ -16,6 +16,7 @@ export class CallPhoneComponent implements OnInit {
   userData:Array<any>;
   isVisibleMess:boolean = false;
   notes:string;
+  noteId:string;
 
   page:any = {
     pageIndex:1,
@@ -37,6 +38,8 @@ export class CallPhoneComponent implements OnInit {
 
   ngOnInit() {
     this.code = this.ActivatedRoute.snapshot.queryParamMap.get('code');
+    this._loading = true;
+    this.getTableData();
     if(this.code){
       this.getCallToken();
     }
@@ -82,6 +85,7 @@ export class CallPhoneComponent implements OnInit {
       },
       onCallRelease: function (connid, caller, calee, contactId) {
         console.log('这里是通话结束时触发的回调函数', connid, caller, calee, contactId)
+        this.setPhoneStatus(calee);
       },
       onHangUp: function (type) {
         console.log('这里是onHangUp事件，type = ', type)
@@ -90,8 +94,6 @@ export class CallPhoneComponent implements OnInit {
     (window as any).workbench.changeVisible(true);
     if(this.showFlag){
       // (window as any).workbench.changeVisible(false);
-      this._loading = true;
-      this.getTableData();
     }else{
       // (window as any).workbench.changeVisible(true);
     }
@@ -103,6 +105,20 @@ export class CallPhoneComponent implements OnInit {
     .subscribe((data:any)=>{
       if(data.status == 1){
         this.message.success('获取成功!');
+      }else{
+        this.message.error(data.message);
+      }
+    },(err:any)=>{
+      this.message.error(err.message);
+    })
+  }
+
+  setPhoneStatus(calee:any){
+    this.http.post('sms/UpdatePhoneStatus',{},{params:{mobilePhone:calee}})
+    .subscribe((data:any)=>{
+      if(data.status == 1){
+        // this.message.success('获取成功!');
+        this.getTableData();
       }else{
         this.message.error(data.message);
       }
@@ -176,7 +192,7 @@ export class CallPhoneComponent implements OnInit {
 
   deletePhone(id:string){
     this._loading = true;
-    this.http.post('',{},{params:{id:id}})
+    this.http.post('sms/DeleteUserPhone',[id])
     .subscribe((data:any)=>{
       if(data.status==1){
         this.message.success('删除成功!');
@@ -191,16 +207,18 @@ export class CallPhoneComponent implements OnInit {
     })
   }
 
-  writeNote(){
+  writeNote(id:string){
     this.isVisibleMess = true;
+    this.noteId = id;
   }
 
   handleCancel(){
     this.isVisibleMess = false;
+    this.notes = '';
   }
 
   handleOk(){
-    this.http.post('',{})
+    this.http.post('sms/SetPhoneRemarks',{id:this.noteId,remarks:this.notes})
     .subscribe((data:any)=>{
       if(data.status==1){
         this.message.success('保存成功!');

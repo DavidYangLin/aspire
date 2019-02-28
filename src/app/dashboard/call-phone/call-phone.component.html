@@ -32,31 +32,33 @@
                 [nzPageSize]="page.pageSize" >
           <thead nz-thead>
             <tr>
-              <th nz-th><span>用户ID</span></th>
+              <!-- <th nz-th><span>用户ID</span></th> -->
               <th nz-th><span>电话号码</span></th>
               <th nz-th><span>创建时间</span></th>
               <th nz-th><span>状态</span></th>
+              <th nz-th><span>备注</span></th>
               <th nz-th><span>操作</span></th>
             </tr>
           </thead>
           <tbody nz-tbody>
             <ng-template ngFor let-data [ngForOf]="nzTable.data">
               <tr nz-tbody-tr>
-                <td nz-td>{{data.userId}}</td>
+                <!-- <td nz-td>{{data.userId}}</td> -->
                 <td nz-td>{{data.phone}}</td>
                 <td nz-td>{{data.creationTime}}</td>
-                <td nz-td>{{data.creationTime}}</td>
+                <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span></td>
+                <td nz-td>{{data.remarks}}</td>
                 <td nz-td> 
-                    <span class="btn">
+                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
                         <a (click)="callPhone(data.phone)">呼叫</a>
                     </span>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <span class="btn">
+                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
                         <a (click)="deletePhone(data.id)">删除</a>
                     </span>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <span class="btn">
-                        <a (click)="deletePhone(data.id)">备注</a>
+                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                        <a (click)="writeNote(data.id)">备注</a>
                     </span>
                 </td>
               </tr>
@@ -67,6 +69,6 @@
         </div>
     </div>
 </div>
-<nz-modal [(nzVisible)]="isVisibleMess" nzTitle="短信充值" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-  <p>内容： <input nz-input disabled="true" [(ngModel)]="notes" style="width: 200px;" placeholder="请输入充值数量"></p>
+<nz-modal [(nzVisible)]="isVisibleMess" nzTitle="填写备注" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <p>内容： <textarea  nz-input [(ngModel)]="notes" style="-width: 200px;" placeholder="请输入备注"></textarea></p>
 </nz-modal> 
