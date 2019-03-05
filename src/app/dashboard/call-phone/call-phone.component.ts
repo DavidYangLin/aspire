@@ -1,4 +1,4 @@
-import { UserService, Broadcaster } from './../../app-service.service';
+import { UserService, Broadcaster, downLoadService } from './../../app-service.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -14,6 +14,7 @@ export class CallPhoneComponent implements OnInit {
   showFlag:string;
   _loading:boolean;
   userData:Array<any>;
+  recordData:Array<any>;
   isVisibleMess:boolean = false;
   notes:string;
   noteId:string;
@@ -31,7 +32,8 @@ export class CallPhoneComponent implements OnInit {
     private http:HttpClient,
     private message:NzMessageService,
     private user:UserService,
-    private Broadcaster:Broadcaster
+    private Broadcaster:Broadcaster,
+    // private downLoadService:downLoadService
   ) { 
     this.showFlag = this.ActivatedRoute.snapshot.paramMap.get('flag');
   }
@@ -168,6 +170,28 @@ export class CallPhoneComponent implements OnInit {
     })
   }
 
+  getTableDataRecord(){
+    this.http.post('UserInfo/ListCallDetailRecords',this.page)
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        // this.userData = data.data.list;
+        // this.page.totalCount = data.data.totalCount;
+        // this.page.pageIndex = data.data.pageIndex;
+        console.log(data);
+      }else{
+        this.message.error('出错了!');
+      }
+      this._loading = false;
+    },(err:any)=>{
+      this.message.error(err.message);
+      this._loading = false;      
+    })
+  }
+
+  downLoadRecord(fileName:string){
+    // this.downLoadService.downLoadFile()
+  }
+
   refreshData(){
     this.getTableData();
   }
@@ -230,6 +254,15 @@ export class CallPhoneComponent implements OnInit {
     },(err:any)=>{
       this.message.error(err.message);
     })
+  }
+
+  test(index){
+    console.log(index);
+    if(index == '0'){
+      this.getTableData();
+    }else if(index == '1'){
+      this.getTableDataRecord();
+    }
   }
 
   ngOnDestroy(){
