@@ -49,7 +49,7 @@
                 <!-- <td nz-td>{{data.userId}}</td> -->
                 <td nz-td>{{data.phone}}</td>
                 <td nz-td>{{data.creationTime}}</td>
-                <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span></td>
+                <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span><span *ngIf="data.status == 2">未接听</span></td>
                 <td nz-td>{{data.remarks}}</td>
                 <td nz-td> 
                     <span style="padding-left: 6px;padding-right: 6px;" class="btn">
@@ -72,7 +72,7 @@
                 </nz-tab>
                 <nz-tab nzSelectedIndex="2" nzTitle="下载录音">
                         <div nz-col nzSpan="24">
-                                <nz-table #nzTable 
+                                <nz-table #nzTable1 
                                 [nzData]="recordData" 
                                 [nzTotal]="page.totalCount"
                                 [nzLoading]="_loading"
@@ -83,24 +83,28 @@
                           <thead nz-thead>
                             <tr>
                               <!-- <th nz-th><span>用户ID</span></th> -->
-                              <th nz-th><span>地址</span></th>
-                              <th nz-th><span>文件名</span></th>
-                              <th nz-th><span>状态</span></th>
-                              <th nz-th><span>备注</span></th>
+                              <th nz-th><span>客户电话</span></th>
+                              <th nz-th><span>时间</span></th>
+                              <th nz-th><span>ID</span></th>
+                              <!-- <th nz-th><span>备注</span></th> -->
                               <th nz-th><span>操作</span></th>
                             </tr>
                           </thead>
                           <tbody nz-tbody>
-                            <ng-template ngFor let-data [ngForOf]="nzTable.data">
+                            <ng-template ngFor let-data [ngForOf]="nzTable1.data">
                               <tr nz-tbody-tr>
                                 <!-- <td nz-td>{{data.userId}}</td> -->
-                                <td nz-td>{{data.phone}}</td>
-                                <td nz-td>{{data.creationTime}}</td>
-                                <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span></td>
-                                <td nz-td>{{data.remarks}}</td>
+                                <td nz-td>{{data.CalledNumber}}</td>
+                                <td nz-td>{{data.StartTime}}</td>
+                                <!-- <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span></td> -->
+                                <td nz-td>{{data.AgentNames}}</td>
                                 <td nz-td> 
                                     <span style="padding-left: 6px;padding-right: 6px;" class="btn">
-                                        <a (click)="callPhone(data.phone)">下载录音</a>
+                                        <a (click)="downLoadRecord(data.Recordings.Recording)">下载录音</a>
+                                    </span>
+                                    <nz-divider nzType="vertical"></nz-divider>
+                                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                                        <a (click)="lookDetail(data)">查看并下载</a>
                                     </span>
                                 </td>
                               </tr>

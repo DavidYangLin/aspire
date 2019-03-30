@@ -1,0 +1,96 @@
+<div nz-row>
+      <div class="titleDiv" nz-col nzSpan="24">
+        <span class="spanTitle">发送详情</span>
+      </div>
+      <div style="margin-top: 10px;" nz-col nzSpan="24">
+        <form nz-form>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">发送方式</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <nz-radio-group [(ngModel)]="sendType" name="sendType" (ngModelChange)="sendTypeChange($event)">
+                <label nz-radio nzValue="0">直接发送</label>
+                <label nz-radio nzValue="1">调用云码发送</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+        <form nz-form *ngIf="sendType=='1'">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">客户账号</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              {{messageDetail.userName}}
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">联系人</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              {{messageDetail.contactPerson}}
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">发送类型</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <span *ngIf="messageDetail.smsType==0" >文字手机报</span>
+                <span *ngIf="messageDetail.smsType==1" >图文手机报</span>
+                <span *ngIf="messageDetail.smsType==3" >霸信</span>
+                <span *ngIf="messageDetail.smsType==4" >闪信</span>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">发送条数</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              {{messageDetail.sendCount}}
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">发送内容</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <textarea maxlength="70" [(ngModel)]="messageDetail.contents" name="content" [nzAutosize]="{ minRows: 6, maxRows: 6 }" nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">客户导入的号码</nz-form-label>
+            <nz-form-control *ngIf="messageDetail.isHasUpTel" [nzSm]="14" [nzXs]="24">
+              {{messageDetail.phones}}
+            </nz-form-control>
+            <nz-form-control *ngIf="!messageDetail.isHasUpTel" [nzSm]="14" [nzXs]="24">
+              无
+              </nz-form-control>
+          </nz-form-item>
+          <!-- <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24">导入号码类型</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-radio-group [(ngModel)]="importType" name="importType" (ngModelChange)="sendTypeChange($event)">
+                  <label nz-radio nzValue="0">txt导入</label>
+                  <label nz-radio nzValue="1">excel导入</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>  -->
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">上传号码</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-upload
+                [nzCustomRequest]="customReq"
+                [nzShowUploadList]="false">
+                <button [disabled]="sendFlag" nz-button>
+                  <i nz-icon type="upload"></i><span>导入电话</span>
+                </button>
+              </nz-upload>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- <nz-form-item nz-row style="margin-bottom:8px;">
+              <nz-form-control [nzSpan]="14" [nzOffset]="6">
+                <button (click)="confirmSend()" nz-button nzType="primary">发送</button>
+              </nz-form-control>
+          </nz-form-item> -->
+        </form>
+        <form nz-form>
+          <nz-form-item nz-row style="margin-bottom:8px;">
+            <nz-form-control [nzSpan]="14" [nzOffset]="6">
+              <button [disabled]="sendFlag" (click)="confirmSend()" nz-button nzType="primary">发送</button>
+            </nz-form-control>
+        </nz-form-item>
+        </form>
+      </div>
+  <!-- <input type="file" ng-model="my_file" id="my_file" style="display: none;"> -->
+</div>

@@ -13,6 +13,7 @@ export class SelfLogComponent implements OnInit {
   _loading:boolean = false;
   isVisible = false;
   selectedValue = '1';
+  isSeeSendDetails:boolean = false;
 
     
   page:any = {
@@ -59,11 +60,25 @@ export class SelfLogComponent implements OnInit {
   ngOnInit() {
     this._loading = true;
     this.getTableData();
+    this.getPermission();
   }
 
   refreshData(){
     this._loading = true;    
     this.getTableData();
+  }
+
+  getPermission(){
+    this.http.request('POST','sms/GetAppAndKeyPer',{})
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        this.isSeeSendDetails = data.data.isSeeSendDetails;
+      }else{
+        this.message.error(data.message);
+      }
+    },(err:any)=>{
+      this.message.error(err.message);
+    })
   }
 
 }

@@ -1,3 +1,6 @@
+import { CloudLogComponent } from './cloud-log/cloud-log.component';
+import { CloudBalanceComponent } from './cloud-balance/cloud-balance.component';
+import { SendMessageComponent } from './../send-message/send-message.component';
 import { CallPhoneComponent } from './call-phone/call-phone.component';
 import { RouterGuard } from './../router.guard';
 import { LogQueryComponent } from './log-query/log-query.component';
@@ -42,6 +45,14 @@ const routes: Routes = [
           component:LocationSetComponent,
           canActivate:[RouterGuard]
         },
+        { path: 'cloudBalance', 
+          component:CloudBalanceComponent,
+          canActivate:[RouterGuard]
+        },
+        { path: 'cloudLog', 
+          component:CloudLogComponent,
+          canActivate:[RouterGuard]
+        },
         { path: 'appSet',
           component:AppSetComponent,
           canActivate:[RouterGuard]
@@ -64,6 +75,9 @@ const routes: Routes = [
         },
         { path: 'messageDetail/:id/:type',
           component:MessageDetailComponent
+        },
+        { path: 'adminSendMessage/:id/:type',
+          component:SendMessageComponent
         },
         { path: 'callPhone',
           component:CallPhoneComponent

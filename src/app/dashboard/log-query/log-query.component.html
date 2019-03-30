@@ -56,13 +56,20 @@
               <a (click)="downPhoneNumber(data.id)">下载电话</a>
           </span>
           <nz-divider nzType="vertical"></nz-divider>
+          <span *ngIf="data.sendState == '2'" class="btn">
+              <a (click)="downPhoneNumber(data.id)">下载发送详情</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
           <span class="btn">
               <a [routerLink]="['../messageDetail',data.id,data.smsType]">查看</a>
           </span>
           <nz-divider nzType="vertical"></nz-divider>
-          <span *ngIf="data.sendState == '0'" class="btn">
+          <!-- <span *ngIf="data.sendState == '0'" class="btn">
               <a (click)="passMessage(data.id)">发送</a>
-          </span>
+          </span> -->
+          <span *ngIf="data.sendState == '0'" class="btn">
+            <a [routerLink]="['../adminSendMessage',data.id,data.smsType]">审核</a>
+        </span>
           <nz-divider nzType="vertical"></nz-divider>
           <span class="btn">
               <a nz-popconfirm nzTitle="是否删除该用户" (nzOnConfirm)="deleteData(data.id)" (nzOnCancel)="cancel()">删除</a>

@@ -1,0 +1,30 @@
+<div nz-row>
+    <div class="titleDiv" nz-col nzSpan="24">
+      <span class="spanTitle">云码余额</span>
+    </div>
+    <!-- <div nz-col nzSpan="24" style="text-align:right;">
+        <button  nz-button [routerLink]="['../rechargeList']" [nzType]="'primary'"><span>返回</span></button>&nbsp;    
+    </div>  -->
+    <div style="margin-top: 10px;" nz-col nzSpan="24">
+      <form nz-form [formGroup]> 
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24">支付方式</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            {{balanceDetail.payinfo}}
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24">余额</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            {{balanceDetail.overage}}            
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24">已发送数量</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            {{balanceDetail.sendTotal}}
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div> 
+  </div>

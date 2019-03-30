@@ -8,13 +8,18 @@ export class ConfigService {
     // apiFileUrl= 'http://localhost:6234/api/';
     // apiUrl = environment.apiUrl;
     // apiFileUrl= environment.apiFileUrl;
+    // apiUrl = 'https://aspire.w7w.cn/api/services/app/';
+    // apiFileUrl= 'https://aspire.w7w.cn/';
+    // apiFile = 'https://aspire.w7w.cn';
+
+    // apiUrl = 'http://api.zj-zcjd.com/api/services/app/';
+    // apiFileUrl= 'http://api.zj-zcjd.com/';
+    // apiFile = 'http://api.zj-zcjd.com';
+    
     apiUrl = 'https://aspire.w7w.cn/api/services/app/';
     apiFileUrl= 'https://aspire.w7w.cn/';
     apiFile = 'https://aspire.w7w.cn';
 
-    // apiUrl = 'http://api.zj-zcjd.com/api/services/app/';
-    // apiFileUrl= 'http://api.zj-zcjd.com/';
-    // apiFile = 'http://api.zj-zcjd.com';  
 
     // apiUrl = 'http://localhost:6234/api/services/app/';
     // apiFileUrl= 'http://localhost:6234/';

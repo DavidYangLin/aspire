@@ -4,10 +4,10 @@
     </div>
     <div nz-col nzSpan="12">
         <nz-input-group nzSearch [nzSuffix]="suffixIconButton">
-            <input type="text" [(ngModel)]="page.keyWords" nz-input placeholder="input search text">
+            <input type="text" [(ngModel)]="page.keyWords" nz-input placeholder="请输入用户名称">
           </nz-input-group>
           <ng-template #suffixIconButton>
-            <button nz-button (click)="queryData()" nzType="primary" nzSearch><i nz-icon type="search"></i></button>
+            <button nz-button (click)="queryData()" nzType="primary" nzSearch><i nz-icon type="search">搜索</i></button>
         </ng-template>
     </div>
     <div nz-col nzSpan="12" style="text-align:right;">

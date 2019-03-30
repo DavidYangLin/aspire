@@ -43,7 +43,9 @@
     <tr nz-tbody-tr>
       <!-- <td nz-td>{{data.userName}}</td>
       <td nz-td>{{data.name}}</td> -->
-      <td nz-td>已发送</td>
+      <td nz-td>
+        <span *ngIf="data.sendState==0">已提交</span>
+        <span *ngIf="data.sendState==2">已发送</span></td>
       <td nz-td>{{data.smsTypeText}}</td>
       <td nz-td>{{data.sendCount}}</td>
       <td nz-td>{{data.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
@@ -52,6 +54,10 @@
       <td nz-td>
           <span class="btn">
               <a [routerLink]="['../messageDetail',data.id,data.smsType]">查看</a>
+          </span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span *ngIf="isSeeSendDetails&&data.sendState==2" class="btn">
+              <a>下载发送详情</a>
           </span>
       </td>
     </tr>

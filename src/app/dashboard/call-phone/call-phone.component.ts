@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService, UploadXHRArgs } from 'ng-zorro-antd';
 
+declare var WorkbenchSdk:any;
+
 @Component({
   selector: 'app-call-phone',
   templateUrl: './call-phone.component.html',
@@ -13,11 +15,12 @@ export class CallPhoneComponent implements OnInit {
   code:string;
   showFlag:string;
   _loading:boolean;
-  userData:Array<any>;
+  userData:Array<any> = [];
   recordData:Array<any>;
   isVisibleMess:boolean = false;
   notes:string;
   noteId:string;
+  indexFlag:string;
 
   page:any = {
     pageIndex:1,
@@ -26,6 +29,7 @@ export class CallPhoneComponent implements OnInit {
     totalCount:0,
     sendState:'3'
   }
+  currentPhone:string;
 
   constructor(
     private ActivatedRoute:ActivatedRoute,
@@ -46,15 +50,16 @@ export class CallPhoneComponent implements OnInit {
       this.getCallToken();
     }
     //初始化云呼叫中心
-    (window as any).workbench = new (window as any).WorkbenchSdk({
+    (window as any).workbench = new WorkbenchSdk({
       dom: 'workbench',
       width: '280px',
       height: '550px',
       instanceId: 'cde0c27d-1578-41c2-bc59-f8fbd7b27f50',
-      ajaxPath: '/api/services/app/UserInfo/InitSdk',
+      ajaxPath: '/home/InitSdk',
       // ajaxType:'path',
       // ajaxOrigin:'http://localhost:6234',
       ajaxMethod: 'post',
+      ajaxApiParamName:'motion',
       ajaxHeaders:{
         Authorization:this.user.getToken(),
         UserId:this.user.getUserId()
@@ -85,21 +90,23 @@ export class CallPhoneComponent implements OnInit {
       onCallEstablish: function (connid, caller, calee, contactId) {
         console.log('这里是通话建立时触发的回调函数', connid, caller, calee, contactId)
       },
-      onCallRelease: function (connid, caller, calee, contactId) {
+      onCallRelease:  (connid, caller, calee, contactId)=> {
         console.log('这里是通话结束时触发的回调函数', connid, caller, calee, contactId)
-        this.setPhoneStatus(calee);
+        this.setPhoneStatus(calee,1);
       },
-      onHangUp: function (type) {
+      onHangUp:  (type)=> {
         console.log('这里是onHangUp事件，type = ', type)
+        if(type=='dialing'){
+          this.setPhoneStatus(this.currentPhone,2);
+        }else if(type=='outbound'){
+          this.setPhoneStatus(this.currentPhone,1);
+        }
       }
     })
-    (window as any).workbench.changeVisible(true);
-    if(this.showFlag){
-      // (window as any).workbench.changeVisible(false);
-    }else{
-      // (window as any).workbench.changeVisible(true);
-    }
-    this.Broadcaster.broadcast('setContentPadd',true);
+    // (window as any).workbench.changeVisible(true);
+    // this.Broadcaster.broadcast('setContentPadd',true);
+    console.log((window as any).workbench);
+    console.log('21313131');
   }
 
   getCallToken(){
@@ -115,8 +122,8 @@ export class CallPhoneComponent implements OnInit {
     })
   }
 
-  setPhoneStatus(calee:any){
-    this.http.post('sms/UpdatePhoneStatus',{},{params:{mobilePhone:calee}})
+  setPhoneStatus(calee:any,status:any){
+    this.http.post('sms/UpdatePhoneStatus',{},{params:{mobilePhone:calee,status:status}})
     .subscribe((data:any)=>{
       if(data.status == 1){
         // this.message.success('获取成功!');
@@ -158,6 +165,7 @@ export class CallPhoneComponent implements OnInit {
     .subscribe((data:any)=>{
       if(data.status==1){
         this.userData = data.data.list;
+        console.log(this.userData);
         this.page.totalCount = data.data.totalCount;
         this.page.pageIndex = data.data.pageIndex;
       }else{
@@ -174,10 +182,11 @@ export class CallPhoneComponent implements OnInit {
     this.http.post('UserInfo/ListCallDetailRecords',this.page)
     .subscribe((data:any)=>{
       if(data.status==1){
-        // this.userData = data.data.list;
-        // this.page.totalCount = data.data.totalCount;
-        // this.page.pageIndex = data.data.pageIndex;
-        console.log(data);
+        let tempData:any = JSON.parse(data.data).CallDetailRecords;
+        console.log(JSON.parse(data.data).CallDetailRecords);
+        this.recordData = tempData.List.CallDetailRecord;
+        this.page.totalCount = tempData.TotalCount;
+        this.page.pageIndex = tempData.PageNumber;
       }else{
         this.message.error('出错了!');
       }
@@ -188,12 +197,38 @@ export class CallPhoneComponent implements OnInit {
     })
   }
 
-  downLoadRecord(fileName:string){
+  downLoadRecord(fileName:any){
     // this.downLoadService.downLoadFile()
+    this.http.post('UserInfo/DownloadRecording',{},{params:{FileName:fileName[0].FileName}})
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display:none');
+        a.setAttribute('href', data.data);
+        a.setAttribute('download', fileName[0].FileName);
+        a.click();
+      }else{
+        this.message.error('出错了!');
+      }
+      this._loading = false;
+    },(err:any)=>{
+      this.message.error(err.message);
+      this._loading = false;      
+    }) 
+  }
+  
+  lookDetail(data:any){
+    (window as any).workbench.downloadRecord(data.ContactId,false);
   }
 
   refreshData(){
-    this.getTableData();
+    // this.getTableData();
+    if(this.indexFlag == '0'){
+      this.getTableData();
+    }else if(this.indexFlag == '1'){
+      this.getTableDataRecord();
+    }
   }
 
   // importExcelData(){
@@ -211,7 +246,8 @@ export class CallPhoneComponent implements OnInit {
   // }
 
   callPhone(callee:string){
-    (window as any).workbench.call(callee,'auto','',false);
+    this.currentPhone = callee;
+    (window as any).workbench.call(callee,'02863209117','',false);
   }
 
   deletePhone(id:string){
@@ -257,12 +293,12 @@ export class CallPhoneComponent implements OnInit {
   }
 
   test(index){
-    console.log(index);
     if(index == '0'){
       this.getTableData();
     }else if(index == '1'){
       this.getTableDataRecord();
     }
+    this.indexFlag = index;
   }
 
   ngOnDestroy(){

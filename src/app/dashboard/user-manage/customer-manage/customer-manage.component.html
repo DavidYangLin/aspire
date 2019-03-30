@@ -137,6 +137,16 @@
                       <nz-form-explain style="color:red" *ngIf="userForm.get('contactPhone').dirty && userForm.get('contactPhone').errors">请输入手机</nz-form-explain>
                     </nz-form-control>
                   </nz-form-item>
+                  <nz-form-item *ngIf="appPermission||keyPermission">
+                      <nz-form-label [nzXs]="4" [nzSm]="4">发送详情</nz-form-label>
+                      <nz-form-control [nzXs]="20" [nzSm]="20">
+                        <!-- <nz-radio-group name="test2" formControlName="isSeeSendDetails"></nz-radio-group> -->
+                        <nz-radio-group name="test2" formControlName="isSeeSendDetails">
+                            <label nz-radio nzValue="1">可查看</label>
+                            <label nz-radio nzValue="0">不可查看</label>
+                          </nz-radio-group>
+                      </nz-form-control>
+                    </nz-form-item>
               </form>
   </nz-modal>
 <nz-modal [(nzVisible)]="isVisibleMess" nzTitle="短信充值" (nzOnCancel)="handleCancelMess()" (nzOnOk)="reCharge()">

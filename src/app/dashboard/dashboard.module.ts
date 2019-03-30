@@ -23,6 +23,9 @@ import { CallPhoneComponent } from './call-phone/call-phone.component';
 import { RechargeComponent } from './recharge/recharge.component';
 import { RechargeListComponent } from './recharge-list/recharge-list.component';
 import { BatchCallComponent } from './batch-call/batch-call.component';
+import { SendMessageComponent } from '../send-message/send-message.component';
+import { CloudBalanceComponent } from './cloud-balance/cloud-balance.component';
+import { CloudLogComponent } from './cloud-log/cloud-log.component';
 
 @NgModule({
   imports: [
@@ -33,6 +36,6 @@ import { BatchCallComponent } from './batch-call/batch-call.component';
     RouterModule,
     NgZorroAntdModule
   ],
-  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,TimeSetComponent, CallPhoneComponent, RechargeComponent, RechargeListComponent, BatchCallComponent]
+  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,SendMessageComponent,TimeSetComponent, CallPhoneComponent, RechargeComponent, RechargeListComponent, BatchCallComponent, CloudBalanceComponent, CloudLogComponent]
 })
 export class DashboardModule { }

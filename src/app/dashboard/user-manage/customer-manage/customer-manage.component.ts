@@ -27,6 +27,10 @@ export class CustomerManageComponent implements OnInit {
     { label: 'APP', value: '0', checked: false },
     { label: '关键字', value: '1', checked: false }
   ];
+  checkOptionsTwo = [
+    { label: '可查看', value: true, checked: false },
+    { label: '不可查看', value: false, checked: false }
+  ];
   appPermission:boolean = false;
   keyPermission:boolean = false;
 
@@ -77,7 +81,8 @@ export class CustomerManageComponent implements OnInit {
       contactPerson: [ null, [ Validators.required ] ],
       contactPhone: [ null, [ Validators.required ] ],
       minNumber:[100000,[Validators.required]],
-      checkOption:[this.checkOptionsOne,[]]      
+      checkOption:[this.checkOptionsOne,[]],
+      isSeeSendDetails:['0',[]]     
     })
   }
 
@@ -126,6 +131,7 @@ export class CustomerManageComponent implements OnInit {
     if(returnData.checkOption[1].checked){
       returnData.isKeyword = true;
     }
+    returnData.isSeeSendDetails = returnData.isSeeSendDetails == '1' ? true:false;
     this.http.request('POST','userInfo/AddOrUpdateUser',{body:returnData})
     .subscribe((data:any)=>{
       if(data.status==1){
@@ -201,6 +207,17 @@ export class CustomerManageComponent implements OnInit {
         }
         perArr.push({ label: '关键字', value: '1', checked: perFlag })
       }
+      // if(user.isSeeSendDetails){
+      //   this.checkOptionsTwo[0].checked = true;
+      //   this.checkOptionsTwo[1].checked = false;
+      // }else{
+      //   this.checkOptionsTwo[0].checked = false;
+      //   this.checkOptionsTwo[1].checked = true;
+      // }
+      let isSeeSendDetails = '0';
+      if(user.isSeeSendDetails){
+        isSeeSendDetails = '1'
+      }
       this.userForm = this.fb.group({
         userName: [ user.userName, [ Validators.required ] ],
         name: [ user.name, [ Validators.required ] ],
@@ -210,6 +227,7 @@ export class CustomerManageComponent implements OnInit {
         userId:[user.id],
         minNumber:[user.minNumber,[ Validators.required ]],
         checkOption:[perArr,[]] ,
+        isSeeSendDetails:[isSeeSendDetails,[]],
         roles:[[user.roles]]
       })
     }else{
@@ -228,6 +246,7 @@ export class CustomerManageComponent implements OnInit {
         contactPhone: [ null, [ Validators.required ] ],
         minNumber:[100000,[Validators.required]],
         checkOption:[perArr,[]] ,
+        isSeeSendDetails:['0',[]],
         roles:[['user']]    
       })
     }

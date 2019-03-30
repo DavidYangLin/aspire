@@ -44,6 +44,16 @@
         <li nz-menu-item routerLink="./timeSet">期限设置</li>
       </ul>
     </li>
+    <li *ngIf="role.isAdmin" nz-submenu>
+        <span title>
+          <i class="anticon anticon-setting"></i>
+          <span>云码查询</span>
+        </span>
+        <ul>
+          <li nz-menu-item routerLink="./cloudBalance">余额查询</li>
+          <li nz-menu-item routerLink="./cloudLog">发送订单</li>
+        </ul>
+    </li>
     <li *ngIf="role.isAdmin" nz-menu-item>
         <span title> 
           <i class="anticon anticon-mail"></i>

