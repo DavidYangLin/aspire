@@ -34,6 +34,7 @@
     <th nz-th><span>状态</span></th>
     <th nz-th><span>发送类型</span></th>
     <th nz-th><span>发送条数</span></th>
+    <th nz-th><span>提交时间</span></th>
     <th nz-th><span>发送时间</span></th>
     <th nz-th style="width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><span>发送内容</span></th>
     <th nz-th><span>操作</span></th>
@@ -47,8 +48,8 @@
       <td nz-td>{{data.sendStateText}}</td>
       <td nz-td>{{data.smsTypeText}}</td>
       <td nz-td>{{data.sendCount}}</td>
-      <td nz-td *ngIf="data.sendState == '0'">{{data.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
-      <td nz-td *ngIf="data.sendState == '2'">{{data.sendTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td nz-td>{{data.creationTime|date:'yyyy-MM-dd HH:mm'}}</td>
+      <td nz-td>{{data.sendTime|date:'yyyy-MM-dd HH:mm'}}</td>
       <td *ngIf="data.smsType!='1'&&data.smsType!='2'" nz-td>{{data.contents}}</td>
       <td *ngIf="data.smsType=='1'||data.smsType=='2'" nz-td>{{data.title}}</td>
       <td nz-td> 

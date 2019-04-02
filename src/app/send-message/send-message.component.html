@@ -10,7 +10,16 @@
               <nz-radio-group [(ngModel)]="sendType" name="sendType" (ngModelChange)="sendTypeChange($event)">
                 <label nz-radio nzValue="0">直接发送</label>
                 <label nz-radio nzValue="1">调用云码发送</label>
+                <label nz-radio nzValue="2">退回发送申请</label>
               </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+        <form nz-form *ngIf="sendType=='2'">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">退回原因</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <textarea maxlength="70" [(ngModel)]="returnReason" name="returnReason" [nzAutosize]="{ minRows: 6, maxRows: 6 }" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </form>
@@ -87,7 +96,8 @@
         <form nz-form>
           <nz-form-item nz-row style="margin-bottom:8px;">
             <nz-form-control [nzSpan]="14" [nzOffset]="6">
-              <button [disabled]="sendFlag" (click)="confirmSend()" nz-button nzType="primary">发送</button>
+              <button  *ngIf="sendType!='2'" [disabled]="sendFlag" (click)="confirmSend()" nz-button nzType="primary">发送</button>&nbsp;
+              <button  *ngIf="sendType=='2'" (click)="returnBack()" nz-button nzType="default">退回</button>
             </nz-form-control>
         </nz-form-item>
         </form>

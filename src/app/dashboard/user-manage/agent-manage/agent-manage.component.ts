@@ -125,6 +125,10 @@ export class AgentManageComponent implements OnInit {
     if(returnData.checkOption[1].checked){
       returnData.isKeyword = true;
     }
+    if(parseInt(returnData.minNumber) < 5000){
+      this.message.info('最少发送量不能小于5000');
+      return;
+    }
     this.http.request('POST','userInfo/AddOrUpdateUser',{body:returnData})
     .subscribe((data:any)=>{
       if(data.status==1){

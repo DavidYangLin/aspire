@@ -1,4 +1,4 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,7 +24,7 @@ export class SelfLogComponent implements OnInit {
     sendState:null
   }
 
-  constructor(private http:HttpClient,private message:NzMessageService) {
+  constructor(private http:HttpClient,private message:NzMessageService,private modal:NzModalService) {
 
   }
 
@@ -78,6 +78,13 @@ export class SelfLogComponent implements OnInit {
       }
     },(err:any)=>{
       this.message.error(err.message);
+    })
+  }
+
+  seeReason(data:any){
+    this.modal.info({
+      nzTitle:'退回原因',
+      nzContent:data.returnReason
     })
   }
 

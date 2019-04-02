@@ -16,6 +16,7 @@ export class SendMessageComponent implements OnInit {
   messageDetail:any = {};
   sendFlag:boolean = false;
   type:any;
+  returnReason:string = '该次内容不符合发送规则，被驳回';
 
   constructor(
     private http:HttpClient,
@@ -88,6 +89,24 @@ export class SendMessageComponent implements OnInit {
     .subscribe((data:any)=>{
       if(data.status==1){
         this.message.success('发送成功!');
+        this.router.navigate(['dashboard/logQuery']);
+      }else{
+        this.message.error('出错了!');
+      }
+    },(err:any)=>{
+      this.message.error(err.message);
+    })
+  }
+
+  returnBack(){
+    if(!this.returnReason){
+      this.message.info('请填写退回原因!');
+      return;
+    }
+    this.http.post('sms/SendBack','',{params:{smsTaskId:this.id,returnReason:this.returnReason}})
+    .subscribe((data:any)=>{
+      if(data.status==1){
+        this.message.success('退回成功!');
         this.router.navigate(['dashboard/logQuery']);
       }else{
         this.message.error('出错了!');

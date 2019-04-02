@@ -69,7 +69,7 @@ export class RechargeComponent implements OnInit {
   }
 
   confirmRecharge(){
-    if(this.validateForm.controls.rechargeType.value != '5'&&parseInt(this.validateForm.controls.rechargeCount.value) < 10000){
+    if(this.validateForm.controls.rechargeType.value != '5'&&parseInt(this.validateForm.controls.rechargeCount.value) < 100000){
       this.message.info('短信十万条起发，请至少充值十万条短信!');
       return;
     }
@@ -77,11 +77,11 @@ export class RechargeComponent implements OnInit {
   }
 
   typeChange(event){
-    if(event == '0'){
+    if(event != '5'){
       if(this.validateForm.controls.email){
         this.validateForm.removeControl('email');
       }
-    }else if(event == '1'){
+    }else if(event == '5'){
       if(!this.validateForm.controls.email){
         this.validateForm.addControl('email',new FormControl('',[Validators.required,Validators.email]))
       }
@@ -106,10 +106,10 @@ export class RechargeComponent implements OnInit {
     .subscribe((data:any)=>{
       if(data.status == 1){
         this.isVisible == false;
-        if(this.rechargeType == '0'){
-          this.message.success('短信充值请求已发送，待管理员确认，短信充值数量稍后将会下发至你的账户，请注意查收!');
+        if(this.rechargeType != '5'){
+          this.message.success('短信充值请求已发送，待管理员确认，请注意查收!');
         }else{
-          this.message.success('数据标签购买请求已发送，待管理员确认，数据标签稍后将会发送至你的邮箱，请注意查收!');
+          this.message.success('数据标签购买请求已发送，待管理员确认，请注意查收!');
         }
       }else{
         this.message.error(data.message);

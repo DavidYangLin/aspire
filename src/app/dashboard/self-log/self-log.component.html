@@ -33,6 +33,7 @@
     <th nz-th><span>状态</span></th>
     <th nz-th><span>发送类型</span></th>
     <th nz-th><span>发送条数</span></th>
+    <th nz-th><span>提交时间</span></th>
     <th nz-th><span>发送时间</span></th>
     <th nz-th style="width:300px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><span>发送内容</span></th>
     <th nz-th><span>操作</span></th>
@@ -45,10 +46,13 @@
       <td nz-td>{{data.name}}</td> -->
       <td nz-td>
         <span *ngIf="data.sendState==0">已提交</span>
-        <span *ngIf="data.sendState==2">已发送</span></td>
+        <span *ngIf="data.sendState==2">已发送</span>
+        <span *ngIf="data.sendState==3">已退回</span>
+      </td>
       <td nz-td>{{data.smsTypeText}}</td>
       <td nz-td>{{data.sendCount}}</td>
-      <td nz-td>{{data.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td nz-td>{{data.creationTime|date:'yyyy-MM-dd HH:mm'}}</td>
+      <td nz-td>{{data.sendTime|date:'yyyy-MM-dd HH:mm'}}</td>
       <td *ngIf="data.smsType!='1'&&data.smsType!='2'" nz-td>{{data.contents}}</td>
       <td *ngIf="data.smsType=='1'||data.smsType=='2'" nz-td>{{data.title}}</td>
       <td nz-td>
@@ -56,9 +60,12 @@
               <a [routerLink]="['../messageDetail',data.id,data.smsType]">查看</a>
           </span>
           <nz-divider nzType="vertical"></nz-divider>
-          <span *ngIf="isSeeSendDetails&&data.sendState==2" class="btn">
+          <!-- <span *ngIf="isSeeSendDetails&&data.sendState==2" class="btn">
               <a>下载发送详情</a>
-          </span>
+          </span> -->
+          <span *ngIf="data.sendState==3" class="btn">
+            <a (click)="seeReason(data)" >查看退回原因</a>
+        </span>
       </td>
     </tr>
   </ng-template>

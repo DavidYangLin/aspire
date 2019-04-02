@@ -46,7 +46,7 @@ const appRoutes:Routes = [
     NgZorroAntdModule,
     RouterModule.forRoot(appRoutes,{enableTracing:false})
   ],
-  providers: [{provide:LocationStrategy,useClass: PathLocationStrategy},{ provide: APP_BASE_HREF, useValue: '/' },{ provide: NZ_I18N, useValue: zh_CN },{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },UserService,ConfigService,CookieService,Broadcaster],
+  providers: [{provide:LocationStrategy,useClass: HashLocationStrategy},{ provide: APP_BASE_HREF, useValue: '/' },{ provide: NZ_I18N, useValue: zh_CN },{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },UserService,ConfigService,CookieService,Broadcaster],
   bootstrap: [AppComponent]
 })
 export class AppModule { } 

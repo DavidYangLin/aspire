@@ -34,6 +34,7 @@
       <th nz-th><span>余额</span></th>
       <th nz-th><span>发送成功条数</span></th>
       <th nz-th><span>发送内容</span></th>
+      <th nz-th><span>发送时间</span></th>
     </tr>
   </thead>
   <tbody nz-tbody>
@@ -45,6 +46,7 @@
         <td nz-td>{{data.remainpoint}}</td>
         <td nz-td>{{data.successCounts}}</td>
         <td nz-td>{{data.contents}}</td>
+        <td nz-td>{{data.creationTime}}</td>
         <!-- <td nz-td> 
             <span *ngIf="data.isHasUpTel" class="btn">
                 <a (click)="downPhoneNumber(data.id)">下载电话</a>

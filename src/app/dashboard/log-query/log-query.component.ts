@@ -53,6 +53,8 @@ export class LogQueryComponent implements OnInit {
             item.sendStateText = '已审核' 
           }else if(item.sendState == '2'){
             item.sendStateText = '已发送'
+          }else if(item.sendState == '3'){
+            item.sendStateText = '已退回'
           }
           if(item.smsType == '0'){
             item.smsTypeText = '文字短信'

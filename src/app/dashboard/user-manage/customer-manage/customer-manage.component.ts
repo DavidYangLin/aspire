@@ -80,7 +80,7 @@ export class CustomerManageComponent implements OnInit {
       name: [ null, [ Validators.required ] ],
       contactPerson: [ null, [ Validators.required ] ],
       contactPhone: [ null, [ Validators.required ] ],
-      minNumber:[100000,[Validators.required]],
+      minNumber:[5000,[Validators.required]],
       checkOption:[this.checkOptionsOne,[]],
       isSeeSendDetails:['0',[]]     
     })
@@ -130,6 +130,10 @@ export class CustomerManageComponent implements OnInit {
     }
     if(returnData.checkOption[1].checked){
       returnData.isKeyword = true;
+    }
+    if(parseInt(returnData.minNumber) < 5000){
+      this.message.info('最少发送量不能小于5000');
+      return;
     }
     returnData.isSeeSendDetails = returnData.isSeeSendDetails == '1' ? true:false;
     this.http.request('POST','userInfo/AddOrUpdateUser',{body:returnData})

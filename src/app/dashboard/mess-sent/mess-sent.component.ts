@@ -51,7 +51,7 @@ export class MessSentComponent implements OnInit {
   filePath:any;
   appPermission:boolean = false;
   keyPermission:boolean = false;
-  minNumber:number = 100000;
+  minNumber:number = 5000;
   btnLoading:boolean = false;
 
   page:any = {pageIndex:1,pageSize:1000,totalCount:10000}
@@ -122,6 +122,15 @@ export class MessSentComponent implements OnInit {
       this.message.info('当前导入数量大于数据标签数量，请重新输入您需要导入的号码数量!');
       return;
     }
+
+    if(this.sendCount==0){
+      this.message.info('本次发送数量不能为0!');
+      return;
+    }
+    // if(this.sendCount < this.minNumber){
+    //   this.message.info(`请至少发送${this.minNumber}条号码!`);
+    //   return;
+    // }
     this.page.totalCount = this.sendCount;
     this.arr = [];
     this.isLoadEnd = false;
@@ -129,7 +138,7 @@ export class MessSentComponent implements OnInit {
     .subscribe((data:any)=>{
       if(data.status == 1){
         //设置最低发送数量
-        this.minNumber = data.data.minNumber;
+        this.minNumber = data.data.minNumber||5000;
         //获取页面上发送的号码总数
         let arrPhone = [];
         if(this.phoneNumberTxt && this.phoneNumberTxt.length != 0){
@@ -345,12 +354,14 @@ export class MessSentComponent implements OnInit {
       sex: this.selectedSex,
       age: this.selectedAge,
       industryId: this.selectedApp ? this.selectedApp.id:'',
-      // industryChildList: this.multipleValueApp,
       industryChildList: multipleValueApp,
-      keywordId: this.selectedKey ? this.selectedKey.id:'' ,
-      // keywordChildList: this.multipleValueKey,
-      keywordChildList: multipleValueKey,
+      // keywordId: this.selectedKey ? this.selectedKey.id:'' ,
+      // keywordChildList: multipleValueKey,
       deadlineSet:this.selectedTime
+    }
+    if(this.selectedKey){
+      returnData.keywordId = this.selectedKey.id;
+      returnData.keywordChildList = multipleValueKey;
     }
     if(this.radioValue == '0'){
       returnData.proCode = this.location[0];
@@ -420,13 +431,16 @@ export class MessSentComponent implements OnInit {
       industryId:this.selectedApp.id,
       // industryChildList:this.multipleValueApp,
       industryChildList:multipleValueApp,
-      keywordId: this.selectedKey.id,
-      // keywordChildList:this.multipleValueKey,
-      keywordChildList:multipleValueKey,
+      // keywordId: this.selectedKey ? this.selectedKey.id:'' ,
+      // keywordChildList:multipleValueKey,
       smsType:this.selectedType,
       sendCount:this.sendCount,
       mobliePhones:this.importPhone,
       filePath:this.filePath
+    }
+    if(this.selectedKey){
+      returnData.keywordId = this.selectedKey.id;
+      returnData.keywordChildList = multipleValueKey;
     }
     if(this.radioValue == '0'){
       returnData.proCode = this.location[0];
