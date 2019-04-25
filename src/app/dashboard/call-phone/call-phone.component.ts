@@ -66,7 +66,7 @@ export class CallPhoneComponent implements OnInit {
       },
       afterCallRule: 15,  // 挂机后的话后处理时间
       header: true,
-      processorJSON: false,
+      // processorJSON: false,
       autoAnswerCall: 8,  // 有来电振铃响8s后自动接听
       useOpenApiSdk: false,
       exportErrorOfApi: true,
