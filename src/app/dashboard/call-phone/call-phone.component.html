@@ -1,123 +1,147 @@
-<div nz-row>
-    <div nz-col nzSpan="8">
-        <div id="workbench"></div>
-    </div>
-    <div nz-col nzSpan="16">
-        <div style="padding-top: 20px;padding-right: 20px;">
-        <div nz-row class="titleDiv" nz-col nzSpan="24">
-            <span class="spanTitle">批量外呼</span>
-        </div>
-        <div nz-col nzSpan="24">
-            <nz-tabset (nzSelectedIndexChange)="test($event)">
-                <nz-tab nzSelectedIndex="1" nzTitle="批量外呼">
-        <div nz-col nzSpan="24">
-            <div nz-row>
-                <div nz-col nzSpan="24" style="text-align:right">
-                    <!-- <button nz-button (click)="importExcelData()" [nzType]="'primary'"><span>导入号码</span></button> -->
-                    <nz-upload
-                    [nzCustomRequest]="customReq"
-                    [nzShowUploadList]="false">
-                    <button nz-button>
-                      <i nz-icon type="upload"></i><span>导入电话</span>
-                    </button>
-                  </nz-upload>
-                </div>
-            </div>
-        </div>
-        <div nz-col nzSpan="24">
-                <nz-table #nzTable 
-                [nzData]="userData" 
-                [nzTotal]="page.totalCount"
-                [nzLoading]="_loading"
-                [(nzPageIndex)]="page.pageIndex"
-                (nzPageIndexChange)="refreshData()" 
-                [nzFrontPagination]="false"
-                [nzPageSize]="page.pageSize" >
-          <thead nz-thead>
-            <tr>
-              <!-- <th nz-th><span>用户ID</span></th> -->
-              <th nz-th><span>电话号码</span></th>
-              <th nz-th><span>创建时间</span></th>
-              <th nz-th><span>状态</span></th>
-              <th nz-th><span>备注</span></th>
-              <th nz-th><span>操作</span></th>
-            </tr>
-          </thead>
-          <tbody nz-tbody>
-            <ng-template ngFor let-data [ngForOf]="nzTable.data">
-              <tr nz-tbody-tr>
-                <!-- <td nz-td>{{data.userId}}</td> -->
-                <td nz-td>{{data.phone}}</td>
-                <td nz-td>{{data.creationTime}}</td>
-                <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span><span *ngIf="data.status == 2">未接听</span></td>
-                <td nz-td>{{data.remarks}}</td>
-                <td nz-td> 
-                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
-                        <a (click)="callPhone(data.phone)">呼叫</a>
-                    </span>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
-                        <a (click)="deletePhone(data.id)">删除</a>
-                    </span>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
-                        <a (click)="writeNote(data.id)">备注</a>
-                    </span>
-                </td>
-              </tr>
-            </ng-template>
-          </tbody> 
-          </nz-table>
-        </div>
-                </nz-tab>
-                <nz-tab nzSelectedIndex="2" nzTitle="下载录音">
-                        <div nz-col nzSpan="24">
-                                <nz-table #nzTable1 
-                                [nzData]="recordData" 
-                                [nzTotal]="page.totalCount"
-                                [nzLoading]="_loading"
-                                [(nzPageIndex)]="page.pageIndex"
-                                (nzPageIndexChange)="refreshData()" 
-                                [nzFrontPagination]="false"
-                                [nzPageSize]="page.pageSize" >
-                          <thead nz-thead>
-                            <tr>
-                              <!-- <th nz-th><span>用户ID</span></th> -->
-                              <th nz-th><span>客户电话</span></th>
-                              <th nz-th><span>时间</span></th>
-                              <th nz-th><span>ID</span></th>
-                              <!-- <th nz-th><span>备注</span></th> -->
-                              <th nz-th><span>操作</span></th>
-                            </tr>
-                          </thead>
-                          <tbody nz-tbody>
-                            <ng-template ngFor let-data [ngForOf]="nzTable1.data">
-                              <tr nz-tbody-tr>
-                                <!-- <td nz-td>{{data.userId}}</td> -->
-                                <td nz-td>{{data.CalledNumber}}</td>
-                                <td nz-td>{{data.StartTime}}</td>
-                                <!-- <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span></td> -->
-                                <td nz-td>{{data.AgentNames}}</td>
-                                <td nz-td> 
-                                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
-                                        <a (click)="downLoadRecord(data.Recordings.Recording)">下载录音</a>
-                                    </span>
-                                    <nz-divider nzType="vertical"></nz-divider>
-                                    <span style="padding-left: 6px;padding-right: 6px;" class="btn">
-                                        <a (click)="lookDetail(data)">查看并下载</a>
-                                    </span>
-                                </td>
-                              </tr>
-                            </ng-template>
-                          </tbody> 
-                          </nz-table>
-                        </div>
-                </nz-tab>
-              </nz-tabset>
-        </div>
-        </div>
-    </div>
+<div class="content">
+  <div style="height: 46px;line-height: 46px;">
+    <img src="../../../assets/image/logo.png">
+  </div>
+  <div class="head">
+      <ul nz-menu [nzMode]="'horizontal'" nzTheme='dark' style="width:80px;float: right;">
+          <li nz-submenu>
+            <!-- <span title>
+                <nz-avatar [nzText]="text" nzSize="large" style="vertical-align: middle;background-color: #ee8100;"></nz-avatar>
+            </span> -->
+            <!-- <ul style="width:80px;">
+                <li nz-menu-item (click)="loginOut()">注 销</li>
+            </ul> -->
+          </li>
+      </ul>
+      <!-- <nz-avatar [nzText]="text" nzSize="large" [ngStyle]="{'background-color':color}" style="vertical-align: middle;"></nz-avatar>       -->
+  </div>
+  <nz-content class="main" style="padding:20px 20px 20px 20px;" >
+      <div [ngStyle]="{'padding':padd}" style="background:#fff;min-height: 350px;">
+          <div nz-row>
+              <div nz-col nzSpan="8">
+                  <div id="workbench"></div>
+              </div>
+              <div nz-col nzSpan="16">
+                  <div style="padding-top: 20px;padding-right: 20px;">
+                  <div nz-row class="titleDiv" nz-col nzSpan="24">
+                      <span class="spanTitle">批量外呼</span>
+                  </div>
+                  <div nz-col nzSpan="24">
+                      <nz-tabset (nzSelectedIndexChange)="test($event)">
+                          <nz-tab nzSelectedIndex="1" nzTitle="批量外呼">
+                  <div nz-col nzSpan="24">
+                      <div nz-row>
+                          <div nz-col nzSpan="24" style="text-align:right">
+                              <!-- <button nz-button (click)="importExcelData()" [nzType]="'primary'"><span>导入号码</span></button> -->
+                              <nz-upload
+                              [nzCustomRequest]="customReq"
+                              [nzShowUploadList]="false">
+                              <button nz-button>
+                                <i nz-icon type="upload"></i><span>导入电话</span>
+                              </button>
+                            </nz-upload>
+                          </div>
+                      </div>
+                  </div>
+                  <div nz-col nzSpan="24">
+                          <nz-table #nzTable 
+                          [nzData]="userData" 
+                          [nzTotal]="page.totalCount"
+                          [nzLoading]="_loading"
+                          [(nzPageIndex)]="page.pageIndex"
+                          (nzPageIndexChange)="refreshData()" 
+                          [nzFrontPagination]="false"
+                          [nzPageSize]="page.pageSize" >
+                    <thead nz-thead>
+                      <tr>
+                        <!-- <th nz-th><span>用户ID</span></th> -->
+                        <th nz-th><span>电话号码</span></th>
+                        <th nz-th><span>创建时间</span></th>
+                        <th nz-th><span>状态</span></th>
+                        <th nz-th><span>备注</span></th>
+                        <th nz-th><span>操作</span></th>
+                      </tr>
+                    </thead>
+                    <tbody nz-tbody>
+                      <ng-template ngFor let-data [ngForOf]="nzTable.data">
+                        <tr nz-tbody-tr>
+                          <!-- <td nz-td>{{data.userId}}</td> -->
+                          <td nz-td>{{data.phone}}</td>
+                          <td nz-td>{{data.creationTime}}</td>
+                          <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span><span *ngIf="data.status == 2">未接听</span></td>
+                          <td nz-td>{{data.remarks}}</td>
+                          <td nz-td> 
+                              <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                                  <a (click)="callPhone(data.phone)">呼叫</a>
+                              </span>
+                              <nz-divider nzType="vertical"></nz-divider>
+                              <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                                  <a (click)="deletePhone(data.id)">删除</a>
+                              </span>
+                              <nz-divider nzType="vertical"></nz-divider>
+                              <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                                  <a (click)="writeNote(data.id)">备注</a>
+                              </span>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </tbody> 
+                    </nz-table>
+                  </div>
+                          </nz-tab>
+                          <nz-tab nzSelectedIndex="2" nzTitle="下载录音">
+                                  <div nz-col nzSpan="24">
+                                          <nz-table #nzTable1 
+                                          [nzData]="recordData" 
+                                          [nzTotal]="page.totalCount"
+                                          [nzLoading]="_loading"
+                                          [(nzPageIndex)]="page.pageIndex"
+                                          (nzPageIndexChange)="refreshData()" 
+                                          [nzFrontPagination]="false"
+                                          [nzPageSize]="page.pageSize" >
+                                    <thead nz-thead>
+                                      <tr>
+                                        <!-- <th nz-th><span>用户ID</span></th> -->
+                                        <th nz-th><span>客户电话</span></th>
+                                        <th nz-th><span>时间</span></th>
+                                        <th nz-th><span>ID</span></th>
+                                        <!-- <th nz-th><span>备注</span></th> -->
+                                        <th nz-th><span>操作</span></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody nz-tbody>
+                                      <ng-template ngFor let-data [ngForOf]="nzTable1.data">
+                                        <tr nz-tbody-tr>
+                                          <!-- <td nz-td>{{data.userId}}</td> -->
+                                          <td nz-td>{{data.CalledNumber}}</td>
+                                          <td nz-td>{{data.StartTime}}</td>
+                                          <!-- <td nz-td><span *ngIf="data.status == 0">未拨打</span><span *ngIf="data.status == 1">已拨打</span></td> -->
+                                          <td nz-td>{{data.AgentNames}}</td>
+                                          <td nz-td> 
+                                              <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                                                  <a (click)="downLoadRecord(data.Recordings.Recording)">下载录音</a>
+                                              </span>
+                                              <nz-divider nzType="vertical"></nz-divider>
+                                              <span style="padding-left: 6px;padding-right: 6px;" class="btn">
+                                                  <a (click)="lookDetail(data)">查看并下载</a>
+                                              </span>
+                                          </td>
+                                        </tr>
+                                      </ng-template>
+                                    </tbody> 
+                                    </nz-table>
+                                  </div>
+                          </nz-tab>
+                        </nz-tabset>
+                  </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </nz-content>
 </div>
+<a id="test" target="blank"></a>
+
 <nz-modal [(nzVisible)]="isVisibleMess" nzTitle="填写备注" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
   <p>内容： <textarea  nz-input [(ngModel)]="notes" style="-width: 200px;" placeholder="请输入备注"></textarea></p>
 </nz-modal> 

@@ -45,11 +45,11 @@ const routes: Routes = [
           component:LocationSetComponent,
           canActivate:[RouterGuard]
         },
-        { path: 'cloudBalance', 
+        { path: 'cloudBalance/:channel', 
           component:CloudBalanceComponent,
           canActivate:[RouterGuard]
         },
-        { path: 'cloudLog', 
+        { path: 'cloudLog/:channel', 
           component:CloudLogComponent,
           canActivate:[RouterGuard]
         },

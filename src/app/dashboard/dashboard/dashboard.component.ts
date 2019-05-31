@@ -81,9 +81,11 @@ export class DashboardComponent implements OnInit {
     .subscribe((data:any)=>{
       if(data.status == 1){
         if(!flag){
-          this.router.navigate(['callPhone'],{relativeTo:this.route});        
+          // this.router.navigate(['callPhone'],{relativeTo:this.route});
+          window.open('/aliyunCallPhone','_blank');      
         }else{
-          this.router.navigate(['batchCall/true'],{relativeTo:this.route});        
+          this.router.navigate(['batchCall/true'],{relativeTo:this.route});
+          window.open('/aliyunCallPhone/true','_blank');      
         }
       }else{
         // this.message.error(data.message);

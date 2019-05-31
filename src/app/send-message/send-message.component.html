@@ -9,7 +9,8 @@
             <nz-form-control [nzSm]="14" [nzXs]="24">
               <nz-radio-group [(ngModel)]="sendType" name="sendType" (ngModelChange)="sendTypeChange($event)">
                 <label nz-radio nzValue="0">直接发送</label>
-                <label nz-radio nzValue="1">调用云码发送</label>
+                <label [nzDisabled]="type=='1'||type=='2'" nz-radio nzValue="1">调用云码发送</label>
+                <label nz-radio nzValue="3">调用云码V2发送</label>
                 <label nz-radio nzValue="2">退回发送申请</label>
               </nz-radio-group>
             </nz-form-control>
@@ -23,7 +24,7 @@
             </nz-form-control>
           </nz-form-item>
         </form>
-        <form nz-form *ngIf="sendType=='1'">
+        <form nz-form *ngIf="sendType=='1'||sendType=='3'">
           <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24">客户账号</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -40,9 +41,10 @@
             <nz-form-label [nzSm]="6" [nzXs]="24">发送类型</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
                 <span *ngIf="messageDetail.smsType==0" >文字手机报</span>
-                <span *ngIf="messageDetail.smsType==1" >图文手机报</span>
+                <span *ngIf="messageDetail.smsType==1&&sendType=='3'" >图文手机报</span>
                 <span *ngIf="messageDetail.smsType==3" >霸信</span>
                 <span *ngIf="messageDetail.smsType==4" >闪信</span>
+                <span *ngIf="messageDetail.smsType==2&&sendType=='3'" >视频手机报</span>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
@@ -51,12 +53,85 @@
               {{messageDetail.sendCount}}
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item>
+          <!-- 文字手机报 -->
+          <nz-form-item *ngIf="messageDetail.smsType==0">
             <nz-form-label [nzSm]="6" [nzXs]="24">发送内容</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
               <textarea maxlength="70" [(ngModel)]="messageDetail.contents" name="content" [nzAutosize]="{ minRows: 6, maxRows: 6 }" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
+          <nz-form-item *ngIf="(messageDetail.smsType=='1'||messageDetail.smsType=='2')&&sendType=='3'">
+              <nz-form-label [nzSm]="6" [nzXs]="24">标题</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input [(ngModel)]="messageDetail.title" name="title" nz-input id="email">
+              </nz-form-control>
+          </nz-form-item>
+          <!-- 图文手机报 -->
+          <!-- <nz-form-item [ngClass]="{'displayNone':messageDetail.smsType!='1','displayBlock':messageDetail.smsType=='1'&&sendType=='3'}">
+              <nz-form-label [nzSm]="6" [nzXs]="24">发送内容</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                  <div id="summernote"></div>
+              </nz-form-control>
+            </nz-form-item> -->
+            <!-- 视频音频 -->
+            <div style="width: 70%;margin: 0 auto;padding: 5px 10px;" *ngIf="messageDetail.smsType=='1'||messageDetail.smsType=='2'">
+                <div style="margin-bottom: 10px;">
+                  <!-- <button nz-button (click)="newTab()">添加帧</button> -->
+                  <button nz-button (click)="showCX()">预览当前帧</button>
+
+                </div>
+                <nz-tabset [nzType]="'card'" [nzSelectedIndex]="index">
+                  <nz-tab *ngFor="let item of messageDetail.cxInfos;index as i" [nzTitle]="titleTemplate">
+                    <ng-template #titleTemplate>
+                      <div>第{{ i }}帧
+                        <!-- <i style="font-size: 16px;font-weight: bold;margin-top: -5px;" (click)="closeTab(i)" class="anticon anticon-close"></i> -->
+                      </div>
+                    </ng-template>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24">本帧播放时间{{item.PlayTime}}</nz-form-label>              
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-select [(ngModel)]="item.PlayTime" [nzDisabled]="true" style="width: 200px;" name="type" nzAllowClear>
+                                <nz-option [nzValue]="1" nzLabel="1秒"></nz-option>
+                                <nz-option [nzValue]="2" nzLabel="2秒"></nz-option>
+                                <nz-option [nzValue]="3" nzLabel="3秒"></nz-option>
+                                <nz-option [nzValue]="4" nzLabel="4秒"></nz-option>
+                                <nz-option [nzValue]="5" nzLabel="5秒"></nz-option>
+                                <nz-option [nzValue]="6" nzLabel="6秒"></nz-option>
+                              </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24">上传彩信内容</nz-form-label>              
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                          <nz-upload [nzDisabled]="true" [(nzFileList)]="item.ImgList" [nzSize]="1024" [nzCustomRequest]="uploader" [nzAccept]="acceptType.img">
+                              <button nz-button>
+                                <i class="anticon anticon-upload"></i>
+                                <span>上传图片</span> 
+                              </button>
+                          </nz-upload>
+                          <nz-upload [nzDisabled]="true" [(nzFileList)]="item.VideoList" [nzSize]="1024" [nzCustomRequest]="uploader" [nzAccept]="acceptType.video">
+                              <button nz-button>
+                                <i class="anticon anticon-upload"></i>
+                                <span>上传视频</span> 
+                              </button>
+                          </nz-upload>
+                          <nz-upload [nzDisabled]="true" [(nzFileList)]="item.VoiceList" [nzSize]="1024" [nzCustomRequest]="uploader" [nzAccept]="acceptType.voice">
+                              <button nz-button>
+                                <i class="anticon anticon-upload"></i>
+                                <span>上传声音</span> 
+                              </button>
+                          </nz-upload>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24">发送内容</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <textarea maxlength="59" [nzAutosize]="{ minRows: 6, maxRows: 6 }" [(ngModel)]="item.Words" name="content" nz-input placeholder="请输入短信内容,最多59个字"></textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                  </nz-tab>
+                </nz-tabset>
+          </div>
           <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24">客户导入的号码</nz-form-label>
             <nz-form-control *ngIf="messageDetail.isHasUpTel" [nzSm]="14" [nzXs]="24">
@@ -103,4 +178,28 @@
         </form>
       </div>
   <!-- <input type="file" ng-model="my_file" id="my_file" style="display: none;"> -->
+  <nz-modal [(nzVisible)]="isVisibleMess" nzTitle="彩信预览" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <div style="width:350px;min-height:400px;margin: 0 auto;border:1px solid #ccc;text-align: center;">
+        <img *ngIf="showCxItem.ImgSrc" src="{{showCxItem.ImgSrc}}"/>
+        <p *ngIf="!showCxItem.ImgSrc">当前没有图片</p>
+        <video *ngIf="showCxItem.VideoSrc" style="display: inline-block;" id="my-video" class="video-js" controls preload="auto" width="350px" height="400"
+        poster="m.jpg" data-setup="{}">
+          <source src="{{showCxItem.VideoSrc}}" type="video/mp4">
+          <source src="{{showCxItem.VideoSrc}}" type="video/ogg">
+          <source src="{{showCxItem.VideoSrc}}" type="video/3gpp">
+          <source src="{{showCxItem.VideoSrc}}" type="video/x-ms-wmv">
+        </video>
+        <p *ngIf="!showCxItem.VideoSrc">当前没有视频/音频</p>
+        <p>{{showCxItem.Words}}</p>
+    </div>
+  </nz-modal>
+  <script src="../../assets/js/video.min.js"></script> 
+  <script src="http://vjs.zencdn.net/5.19/lang/zh-CN.js"></script>
+  <script type="text/javascript">
+    var myPlayer = videojs('my-video');
+    videojs("my-video").ready(function(){
+      var myPlayer = this;
+      myPlayer.play();
+    });
+  </script>
 </div>

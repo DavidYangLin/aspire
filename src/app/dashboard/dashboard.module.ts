@@ -1,3 +1,4 @@
+import { CallPhoneComponent } from './call-phone/call-phone.component';
 import { Broadcaster } from './../app-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -19,7 +20,6 @@ import { MessSentComponent } from './mess-sent/mess-sent.component';
 import { SelfLogComponent } from './self-log/self-log.component';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
 import { TimeSetComponent } from './time-set/time-set.component';
-import { CallPhoneComponent } from './call-phone/call-phone.component';
 import { RechargeComponent } from './recharge/recharge.component';
 import { RechargeListComponent } from './recharge-list/recharge-list.component';
 import { BatchCallComponent } from './batch-call/batch-call.component';
@@ -36,6 +36,7 @@ import { CloudLogComponent } from './cloud-log/cloud-log.component';
     RouterModule,
     NgZorroAntdModule
   ],
-  declarations: [DashboardComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,SendMessageComponent,TimeSetComponent, CallPhoneComponent, RechargeComponent, RechargeListComponent, BatchCallComponent, CloudBalanceComponent, CloudLogComponent]
+  declarations: [DashboardComponent,CallPhoneComponent,MessSentComponent,UserCenterComponent, AgentManageComponent, CustomerManageComponent, LocationSetComponent, AppSetComponent, KeySetComponent, LogQueryComponent, SelfLogComponent,MessageDetailComponent,SendMessageComponent,TimeSetComponent, RechargeComponent, RechargeListComponent, BatchCallComponent, CloudBalanceComponent, CloudLogComponent],
+  exports:[CallPhoneComponent]
 })
 export class DashboardModule { }

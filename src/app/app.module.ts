@@ -1,3 +1,4 @@
+import { CallPhoneComponent } from './dashboard/call-phone/call-phone.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './model/config';
 //import { DashboardModule } from '../app/dashboard/dashboard.module';
@@ -14,6 +15,9 @@ import { registerLocaleData, HashLocationStrategy, LocationStrategy, PathLocatio
 import zh from '@angular/common/locales/zh';
 import { LoginComponent } from './login/login.component';
 import { UserService, JwtInterceptorService, Broadcaster } from './app-service.service';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { aliyunCallPhoneComponent } from './call-phone/call-phone.component';
+import { AppPipe, PhoneFormatPipe } from './app.pipe';
 
 registerLocaleData(zh);
 
@@ -29,6 +33,10 @@ const appRoutes:Routes = [
   { path: '',
     redirectTo: '/login',
     pathMatch: 'full' 
+  },
+  {
+    path:'aliyunCallPhone',
+    component:aliyunCallPhoneComponent
   }
 ];
 
@@ -36,6 +44,9 @@ const appRoutes:Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
+    aliyunCallPhoneComponent,
+    AppPipe,
+    PhoneFormatPipe
   ],
   imports: [
     BrowserModule,

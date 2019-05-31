@@ -50,8 +50,18 @@
           <span>云码查询</span>
         </span>
         <ul>
-          <li nz-menu-item routerLink="./cloudBalance">余额查询</li>
-          <li nz-menu-item routerLink="./cloudLog">发送订单</li>
+          <li nz-menu-item routerLink="./cloudBalance/0">余额查询</li>
+          <li nz-menu-item routerLink="./cloudLog/0">发送订单</li>
+        </ul>
+    </li>
+    <li *ngIf="role.isAdmin" nz-submenu>
+        <span title>
+          <i class="anticon anticon-setting"></i>
+          <span>云码V2查询</span>
+        </span>
+        <ul>
+          <li nz-menu-item routerLink="./cloudBalance/1">余额查询</li>
+          <li nz-menu-item routerLink="./cloudLog/1">发送订单</li>
         </ul>
     </li>
     <li *ngIf="role.isAdmin" nz-menu-item>
@@ -70,7 +80,11 @@
     <li nz-menu-item>
         <span title> 
           <i class="anticon anticon-mail"></i>
-          <span (click)="callPhone(false)">呼叫中心</span> 
+          <!-- <span (click)="callPhone(false)">呼叫中心</span> -->
+          <span>
+            <a target="_blank" herf="https://ccc.aliyun.com/workbench/aspire">呼叫中心</a>
+          </span>
+          <!-- https://ccc.aliyun.com/workbench/aspire -->
         </span> 
     </li>
     <!-- <li nz-menu-item>

@@ -30,6 +30,17 @@ export class MessSentComponent implements OnInit {
   radioValue:any = '0';
   $summernote:any;
   title:any;
+  cxInfos: Array<{ PlayTime: string, Img: any,Video:any,Voice: any,Words:string }> = [{
+    PlayTime:'3',
+    Img:'',
+    Voice:'',
+    Video:'',
+    Words:''
+  }];
+  isVisibleMess:boolean = false;
+  showCxItem:any = {};
+
+  index = 0;
 
   isloadNumber:boolean = false;
 
@@ -42,8 +53,9 @@ export class MessSentComponent implements OnInit {
   phoneNumberTxt:any;
   acceptType = {
     txt:".txt",
-    video:'.mp4,.vga,.avi,.wmv,.mkv,.flv',
-    img:'.png,.jpg,.jpeg'
+    video:'.mp4,.3gp,.ogg',
+    img:'.png,.jpg,.gif,.bmp',
+    voice:'.mp3,.midi,.wav'
   }
   sendCount:number = 0;
   sendContent:any;
@@ -53,6 +65,7 @@ export class MessSentComponent implements OnInit {
   keyPermission:boolean = false;
   minNumber:number = 5000;
   btnLoading:boolean = false;
+  
 
   page:any = {pageIndex:1,pageSize:1000,totalCount:10000}
 
@@ -454,12 +467,30 @@ export class MessSentComponent implements OnInit {
       //returnData.contryCode = this.location[2];
       returnData.contryCode = this.selectCountry[0]||'';
     }
-    if(this.selectedType == '1'){
-      returnData.contents = this.$summernote.summernote('code');
+    if(this.selectedType == '1'||this.selectedType == '2'){
+      // returnData.contents = this.$summernote.summernote('code');
+      returnData.cxInfos = this.cxInfos;
+      let flag = false;
+      returnData.cxInfos.forEach((item)=>{
+        if(item.Img){
+          flag = true;
+        }
+        if(item.Video){
+          flag = true;
+        }
+        if(item.Voice){
+          flag = true;
+        }
+      })
+      if(!flag){
+        this.message.info('你当前的彩信没有上传任何图片，视频，或者音频不能发送');
+        return;
+      }
     }else if(this.selectedType == '0'||this.selectedType == '3'||this.selectedType == '4'){
       returnData.contents = this.sendContent;
     }
-    if(!returnData.contents){
+
+    if(!returnData.contents&&this.selectedType!='1'&&this.selectedType!='2'){
       this.message.info('请填写发送内容!');
       return;
     }
@@ -638,6 +669,79 @@ export class MessSentComponent implements OnInit {
       });
     })
   }
+
+  uploaderImage = (item: any) => {
+    const formData = new FormData();
+    formData.append(item.name, item.file as any);
+    const req = new HttpRequest('POST',"api/File/UpFile", formData,
+    {params:new HttpParams().set('UpFlag',this.selectedType)});
+    return this.http.request(req).subscribe((event: any) => {
+      if (event instanceof HttpResponse) {
+        if (event.body.status == 1) {
+          item.onSuccess();
+          this.cxInfos[this.index].Img = event.body.data.url;
+        } else {
+          setTimeout(()=>{
+            item.onError();
+          })
+          this.message.error(event.body.message);
+        }
+      }
+    }, (err) => {
+      setTimeout(() => {
+        item.onError();
+      });
+    })
+  }
+
+  uploaderVideo = (item: any) => {
+    const formData = new FormData();
+    formData.append(item.name, item.file as any);
+    const req = new HttpRequest('POST',"api/File/UpFile", formData,
+    {params:new HttpParams().set('UpFlag',this.selectedType)});
+    return this.http.request(req).subscribe((event: any) => {
+      if (event instanceof HttpResponse) {
+        if (event.body.status == 1) {
+          item.onSuccess();
+          this.cxInfos[this.index].Video = event.body.data.url
+        } else {
+          setTimeout(()=>{
+            item.onError();
+          })
+          this.message.error(event.body.message);
+        }
+      }
+    }, (err) => {
+      setTimeout(() => {
+        item.onError();
+      });
+    })
+  }
+
+  uploaderVoice = (item: any) => {
+    const formData = new FormData();
+    formData.append(item.name, item.file as any);
+    const req = new HttpRequest('POST',"api/File/UpFile", formData,
+    {params:new HttpParams().set('UpFlag',this.selectedType)});
+    return this.http.request(req).subscribe((event: any) => {
+      if (event instanceof HttpResponse) {
+        if (event.body.status == 1) {
+          item.onSuccess();
+          this.cxInfos[this.index].Voice = event.body.data.url
+        } else {
+          setTimeout(()=>{
+            item.onError();
+          })
+          this.message.error(event.body.message);
+        }
+      }
+    }, (err) => {
+      setTimeout(() => {
+        item.onError();
+      });
+    })
+  }
+
   selectChange(value:any){
     this.sendCount = 0;
     this.arr = [];
@@ -685,4 +789,45 @@ export class MessSentComponent implements OnInit {
   }
 
   compareFn = (o1: any, o2: any) => o1 && o2 ? o1.id === o2.id : o1 === o2;
+
+  closeTab(tab) {
+    if(this.cxInfos.length == 1){
+      this.message.info('不能删除，彩信至少有一帧!');
+      return;
+    }
+    this.cxInfos.splice(tab, 1);
+  }
+
+  newTab() {
+    this.cxInfos.push({
+      PlayTime:'3',
+      Img:'',
+      Video:'',
+      Voice:'',
+      Words:''
+    });
+  }
+  showCX(){
+    this.isVisibleMess = true;
+    this.showCxItem = Object.assign({},this.cxInfos[this.index]);
+    console.log(this.cxInfos);
+    if(this.showCxItem.Img){
+      this.showCxItem.ImgSrc = this.config.apiFile + this.showCxItem.Img;
+    }
+    if(this.showCxItem.Video){
+      this.showCxItem.VideoSrc = this.config.apiFile + this.showCxItem.Video;
+    }
+    if(this.showCxItem.Voice){
+      this.showCxItem.VoiceSrc = this.config.apiFile + this.showCxItem.Voice;
+    }
+  }
+
+  handleOk(){
+    this.isVisibleMess = false;
+  }
+
+  handleCancel(){
+    this.isVisibleMess = false;
+
+  }
 }

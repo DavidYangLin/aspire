@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -13,18 +14,26 @@ export class CloudLogComponent implements OnInit {
   _loading:boolean = false;
   isVisible = false;
   selectedValue = '';
+  channel:string;
+  unsubscribel:any;
 
     
   page:any = {
     pageIndex:1,
     pageSize:5,
     keyWords:'',
-    totalCount:0
+    totalCount:0,
+    channel:0
   }
   constructor(
     private http:HttpClient,
-    private message:NzMessageService
-  ) { }
+    private message:NzMessageService,
+    private activateRoute:ActivatedRoute,
+    private router:Router
+  ) { 
+    this.channel = this.activateRoute.snapshot.paramMap.get('channel');
+    this.page.channel = this.channel;
+  }
 
   ngOnInit() {
     this._loading = true;
@@ -47,8 +56,23 @@ export class CloudLogComponent implements OnInit {
     })
   }
 
+  ngAfterViewInit(){
+    this.unsubscribel = this.router.events.subscribe((event:any)=>{
+      if(event instanceof NavigationEnd){
+        let channel = this.activateRoute.snapshot.paramMap.get('channel');
+        if(this.channel != channel){
+          this.channel = channel;
+          this.getTableData();
+        }
+      }
+    })
+  }
+
   refreshData(){
 
+  }
+  ngOnDestroy(){
+    this.unsubscribel.unsubscribe()
   }
 
 }
