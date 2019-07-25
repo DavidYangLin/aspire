@@ -7,6 +7,7 @@ import { fromEvent, Observable } from 'rxjs';
 import * as _ from 'lodash';
 import { ConfigService } from '../../model/config';
 import { Router, ActivatedRoute } from '@angular/router';
+import { e } from '@angular/core/src/render3';
 declare var $:any;
 
 @Component({
@@ -460,12 +461,21 @@ export class MessSentComponent implements OnInit {
     }else if(this.radioValue == '1'){
       returnData.proCode = this.location[0];
       //returnData.cityCode = this.location[1];
-      returnData.cityCode = this.selectCity[0]||'';
+      if(this.selectCity||this.selectCity.length > 0){
+        returnData.cityCode = this.selectCity.join(',');
+      }else{
+        returnData.cityCode = '';
+      }
     }else if(this.radioValue == '2'){
       returnData.proCode = this.location[0];
       returnData.cityCode = this.location[1];
       //returnData.contryCode = this.location[2];
-      returnData.contryCode = this.selectCountry[0]||'';
+      if(this.selectCountry||this.selectCountry.length > 0){
+        returnData.contryCode = this.selectCountry.join(',');
+      }else{
+        returnData.contryCode = '';
+      }
+      // returnData.contryCode = this.selectCountry||'';
     }
     if(this.selectedType == '1'||this.selectedType == '2'){
       // returnData.contents = this.$summernote.summernote('code');
@@ -501,7 +511,6 @@ export class MessSentComponent implements OnInit {
         return;
       }
     }
-    // console.log(returnData);
     this.isSpinning = true;    
     this.http.post('sms/SubmitSendTask',returnData)
     .subscribe((data:any)=>{
@@ -518,6 +527,7 @@ export class MessSentComponent implements OnInit {
   }
 
   private formatAddress(data: [any]) {
+
     return data.map((value) => {
         return {
             value: value['code'],

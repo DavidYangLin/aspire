@@ -73,7 +73,8 @@ export class DashboardComponent implements OnInit {
   }
 
   callPhone(flag:boolean){
-    this.getCode(flag);
+    window.open('https://ccc.aliyun.com/workbench/aspire','_blank')
+    // this.getCode(flag);
   }
 
   getCode(flag:boolean){

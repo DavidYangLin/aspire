@@ -42,7 +42,6 @@ export class CloudBalanceComponent implements OnInit {
 
   ngAfterViewInit(){
     this.unsubscribel = this.router.events.subscribe((event:any)=>{
-      console.log('221');
       if(event instanceof NavigationEnd){
         let channel = this.activateRoute.snapshot.paramMap.get('channel');
         if(this.channel != channel){

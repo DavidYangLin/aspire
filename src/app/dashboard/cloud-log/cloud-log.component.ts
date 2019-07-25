@@ -62,6 +62,7 @@ export class CloudLogComponent implements OnInit {
         let channel = this.activateRoute.snapshot.paramMap.get('channel');
         if(this.channel != channel){
           this.channel = channel;
+          this.page.channel = this.channel;
           this.getTableData();
         }
       }

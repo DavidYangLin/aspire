@@ -53,6 +53,12 @@
               {{messageDetail.sendCount}}
             </nz-form-control>
           </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">归属地</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              {{messageDetail.locationStr}}
+            </nz-form-control>
+          </nz-form-item>
           <!-- 文字手机报 -->
           <nz-form-item *ngIf="messageDetail.smsType==0">
             <nz-form-label [nzSm]="6" [nzXs]="24">发送内容</nz-form-label>
@@ -153,13 +159,14 @@
           <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24">上传号码</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24">
-                <nz-upload
+                <!-- <nz-upload
                 [nzCustomRequest]="customReq"
                 [nzShowUploadList]="false">
                 <button [disabled]="sendFlag" nz-button>
                   <i nz-icon type="upload"></i><span>导入电话</span>
                 </button>
-              </nz-upload>
+              </nz-upload> -->
+              <button nz-button (click)="test()">导入电话</button>
             </nz-form-control>
           </nz-form-item>
           <!-- <nz-form-item nz-row style="margin-bottom:8px;">
@@ -193,6 +200,12 @@
         <p>{{showCxItem.Words}}</p>
     </div>
   </nz-modal>
+  <!-- [nzMask]="null" -->
+  <!-- <nz-modal [nzBodyStyle]="test1" [nzWrapClassName]="'test123'" [nzClosable]="false" [(nzVisible)]="progressVisible" nzTitle="彩信预览" [nzTitle]="null" [nzFooter]="null">
+    <div style="-width:350px;-min-height:400px;margin: 0 auto;-border:1px solid #ccc;text-align: center;">
+      <nz-progress [nzPercent]="75" nzType="circle"></nz-progress>
+    </div>
+  </nz-modal> -->
   <script src="../../assets/js/video.min.js"></script> 
   <script src="http://vjs.zencdn.net/5.19/lang/zh-CN.js"></script>
   <script type="text/javascript">
@@ -202,4 +215,5 @@
       myPlayer.play();
     });
   </script>
+  <input type="file" ng-model="my_file" id="my_file" style="display: none;">
 </div>

@@ -67,6 +67,16 @@ export class LogQueryComponent implements OnInit {
           }else if(item.smsType == '4'){
             item.smsTypeText = '闪信'
           }
+          // item.locationStr = '';
+          // if(item.pro){
+          //   item.locationStr = item.Pro;
+          // }
+          // if(item.city){
+          //   item.locationStr += item.City;
+          // }
+          // if(item.contry){
+          //   item.locationStr += item.Contry;
+          // }
         }))
         this.page.totalCount = data.data.totalCount;
         this.page.pageIndex = data.data.pageIndex;
