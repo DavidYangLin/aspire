@@ -23,7 +23,7 @@
     "@types/lodash": "^4.14.116",
     "bootstrap": "^3.3.5",
     "core-js": "^2.5.4",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "less": "^2.7.3",
     "ng-zorro-antd": "^1.4.0",
     "ngx-cookie-service": "^1.0.10",
