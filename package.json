@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "@types/lodash": "^4.14.116",
-    "bootstrap": "^3.3.5",
+    "bootstrap": "^3.4.1",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
     "less": "^2.7.3",
